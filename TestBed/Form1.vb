@@ -62,17 +62,17 @@ Public Class Form1
     End Sub
 
     Private Sub NoneToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles NoneToolStripMenuItem.Click
-        Me.MdiTabStrip1.TabPermanence = MdiTabStrip.MdiTabPermanence.None
+        Me.MdiTabStrip1.TabPermanence = MdiTabStrip2.MdiTabPermanence.None
         Me.SetTabPermanenceMenuItemCheckedState(Me.NoneToolStripMenuItem)
     End Sub
 
     Private Sub FirstTabToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles FirstTabToolStripMenuItem.Click
-        Me.MdiTabStrip1.TabPermanence = MdiTabStrip.MdiTabPermanence.First
+        Me.MdiTabStrip1.TabPermanence = MdiTabStrip2.MdiTabPermanence.First
         Me.SetTabPermanenceMenuItemCheckedState(Me.FirstTabToolStripMenuItem)
     End Sub
 
     Private Sub LastTabOpenToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles LastTabOpenToolStripMenuItem.Click
-        Me.MdiTabStrip1.TabPermanence = MdiTabStrip.MdiTabPermanence.LastOpen
+        Me.MdiTabStrip1.TabPermanence = MdiTabStrip2.MdiTabPermanence.LastOpen
         Me.SetTabPermanenceMenuItemCheckedState(Me.LastTabOpenToolStripMenuItem)
     End Sub
 

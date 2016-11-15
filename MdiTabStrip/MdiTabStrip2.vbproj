@@ -7,7 +7,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{DAA053B9-3316-4A1A-B9B9-A185D6DA73DA}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>MdiTabStrip</RootNamespace>
+    <RootNamespace>MdiTabStrip2</RootNamespace>
     <AssemblyName>MdiTabStrip</AssemblyName>
     <MyType>Windows</MyType>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>

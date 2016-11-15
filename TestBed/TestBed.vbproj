@@ -172,9 +172,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MdiTabStrip\MdiTabStrip.vbproj">
+    <ProjectReference Include="..\MdiTabStrip\MdiTabStrip2.vbproj">
       <Project>{DAA053B9-3316-4A1A-B9B9-A185D6DA73DA}</Project>
-      <Name>MdiTabStrip</Name>
+      <Name>MdiTabStrip2</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

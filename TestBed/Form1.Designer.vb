@@ -52,7 +52,7 @@ Partial Class Form1
         Me.OneToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
         Me.TwoToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
         Me.Panel1 = New System.Windows.Forms.Panel
-        Me.MdiTabStrip1 = New MdiTabStrip.MdiTabStrip
+        Me.MdiTabStrip1 = New MdiTabStrip2.MdiTabStrip
         Me.MenuStrip1.SuspendLayout()
         Me.ToolStrip1.SuspendLayout()
         Me.Panel1.SuspendLayout()
@@ -311,7 +311,7 @@ Partial Class Form1
         Me.MdiTabStrip1.MdiNewTabImage = Nothing
         Me.MdiTabStrip1.MdiNewTabVisible = True
         Me.MdiTabStrip1.MdiNewTabWidth = 30
-        Me.MdiTabStrip1.MdiWindowState = MdiTabStrip.MdiChildWindowState.Maximized
+        Me.MdiTabStrip1.MdiWindowState = MdiTabStrip2.MdiChildWindowState.Maximized
         Me.MdiTabStrip1.MinimumSize = New System.Drawing.Size(50, 33)
         Me.MdiTabStrip1.MouseOverTabFont = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.MdiTabStrip1.Name = "MdiTabStrip1"
@@ -371,7 +371,7 @@ Partial Class Form1
     Friend WithEvents FirstTabToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents LastTabOpenToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents Panel1 As System.Windows.Forms.Panel
-    Friend WithEvents MdiTabStrip1 As MdiTabStrip.MdiTabStrip
+    Friend WithEvents MdiTabStrip1 As MdiTabStrip2.MdiTabStrip
     Friend WithEvents ToolStripSplitButton1 As System.Windows.Forms.ToolStripSplitButton
     Friend WithEvents OneToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents TwoToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem

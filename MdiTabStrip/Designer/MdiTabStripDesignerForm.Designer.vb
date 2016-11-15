@@ -153,7 +153,7 @@ Namespace Design
             '
             'PictureBox1
             '
-            Me.PictureBox1.Image = Global.MdiTabStrip.My.Resources.Resources.TabDesigner
+            Me.PictureBox1.Image = Global.MdiTabStrip2.My.Resources.Resources.TabDesigner
             Me.PictureBox1.InitialImage = Nothing
             Me.PictureBox1.Location = New System.Drawing.Point(12, 9)
             Me.PictureBox1.Name = "PictureBox1"
