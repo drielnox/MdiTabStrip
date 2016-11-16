@@ -35,6 +35,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Design" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -44,9 +45,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Design\MdiTabTemplateControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Design\MdiTabTemplateControl.Designer.cs">
+      <DependentUpon>MdiTabTemplateControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Design\TabSelectedEventArgs.cs" />
+    <Compile Include="Enums.cs" />
     <Compile Include="Design\ActiveMdiTabProperties.cs" />
     <Compile Include="Design\InactiveMdiTabProperties.cs" />
     <Compile Include="Design\MdiTabProperties.cs" />
+    <Compile Include="Design\MdiTabStripDesigner.cs" />
+    <Compile Include="Design\MdiTabStripDesignerActionList.cs" />
     <Compile Include="MdiMenuStripRenderer.cs" />
     <Compile Include="MdiTabCollection.cs" />
     <Compile Include="MdiTabStrip.cs">
