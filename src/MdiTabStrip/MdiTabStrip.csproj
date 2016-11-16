@@ -45,6 +45,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Design\Form1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Design\Form2.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Design\Form3.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Design\MdiTabStripDesignerForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Design\MdiTabStripDesignerForm.Designer.cs">
+      <DependentUpon>MdiTabStripDesignerForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Design\MdiTabTemplateControl.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -58,9 +73,24 @@
     <Compile Include="Design\MdiTabProperties.cs" />
     <Compile Include="Design\MdiTabStripDesigner.cs" />
     <Compile Include="Design\MdiTabStripDesignerActionList.cs" />
+    <Compile Include="MdiMenuItem.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="MdiMenuStripRenderer.cs" />
+    <Compile Include="MdiNewTab.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="MdiScrollTab.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="MdiTab.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="MdiTabCollection.cs" />
     <Compile Include="MdiTabStrip.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="MdiTabStripDropDown.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="MdiTabStripItemBase.cs">
@@ -69,10 +99,32 @@
     <Compile Include="MdiTabStripItemBase.Designer.cs">
       <DependentUpon>MdiTabStripItemBase.cs</DependentUpon>
     </Compile>
+    <Compile Include="MdiTabStripTabClickedEventArgs.cs" />
     <Compile Include="MdiTabStripTabEventArgs.cs" />
     <Compile Include="MdiTabStriptTabClickedEventArgs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="TabStripLayoutEngine.cs" />
     <Service Include="{94E38DFF-614B-4cbd-B67C-F211BB35CE8B}" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\document.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\NewDocumentHS.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\TabDesigner.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

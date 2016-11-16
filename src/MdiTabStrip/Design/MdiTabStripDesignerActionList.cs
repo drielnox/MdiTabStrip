@@ -232,7 +232,7 @@ namespace MdiTabStrip.Design
             editor.TabTemplate = template;
             editor.ShowDialog();
 
-            if (editor.DialogResult = DialogResult.OK)
+            if (editor.DialogResult == DialogResult.OK)
             {
                 InactiveTabColor = editor.TabTemplate.InactiveTabTemplate.BackColor;
                 InactiveTabForeColor = editor.TabTemplate.InactiveTabTemplate.ForeColor;

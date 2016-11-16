@@ -1,4 +1,6 @@
-﻿using System.ComponentModel;
+﻿using MdiTabStrip.Properties;
+using System;
+using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
@@ -21,6 +23,8 @@ namespace MdiTabStrip.Design
         private Point[] _closeButtonBounds;
         private Point[] _closeButtonGlyphBounds;
         private bool _isMouseOverCloseButton = false;
+
+        internal event EventHandler<TabSelectedEventArgs> TabSelected;
 
         public ActiveMdiTabProperties ActiveTabTemplate
         {
@@ -58,12 +62,71 @@ namespace MdiTabStrip.Design
             DoubleBuffered = true;
             GetTabBounds();
             Dock = DockStyle.Top;
+
+            _activeTemplate.OnPropertyChanged += _activeTemplate_OnPropertyChanged;
+            _inactiveTemplate.OnPropertyChanged += _inactiveTemplate_OnPropertyChanged;
+            _mouseOverTemplate.OnPropertyChanged += _mouseOverTemplate_OnPropertyChanged;
         }
 
         protected override void OnPaint(PaintEventArgs pe)
         {
             pe.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
             DrawTab(pe.Graphics);
+        }
+
+        protected override void OnPaintBackground(PaintEventArgs pe)
+        {
+            base.OnPaintBackground(pe);
+
+            pe.Graphics.FillRectangle(Brushes.White, pe.ClipRectangle);
+            DrawTabBackground(pe.Graphics);
+        }
+
+        protected override void OnMouseMove(MouseEventArgs e)
+        {
+            base.OnMouseMove(e);
+
+            if (CloseButtonHitTest(e.X, e.Y))
+            {
+                IsMouseOverCloseButton = true;
+            }
+            else
+            {
+                IsMouseOverCloseButton = false;
+            }
+        }
+
+        protected override void OnMouseDown(MouseEventArgs e)
+        {
+            base.OnMouseDown(e);
+
+            TabSelectedEventArgs ev = null;
+
+            if (ActiveHitTest(e.X, e.Y))
+            {
+                ev = new TabSelectedEventArgs(TabType.Active);
+            }
+            else if (InactiveHitTest(e.X, e.Y))
+            {
+                ev = new TabSelectedEventArgs(TabType.Inactive);
+            }
+            else if (MouseOverHitTest(e.X, e.Y))
+            {
+                ev = new TabSelectedEventArgs(TabType.MouseOver);
+            }
+
+            if (ev != null)
+            {
+                TabSelected(this, ev);
+            }
+        }
+
+        protected override void OnResize(EventArgs e)
+        {
+            base.OnResize(e);
+
+            GetTabBounds();
+            Invalidate();
         }
 
         protected virtual void DrawTab(Graphics g)
@@ -280,6 +343,379 @@ namespace MdiTabStrip.Design
             DrawFormIcon(g, iconRectangle);
             DrawTabText(g, textRectangle, "Active Tab", ActiveTabTemplate.ForeColor, ActiveTabTemplate.Font);
             DrawCloseButton(g);
+        }
+
+        private void DrawInactiveTab(Graphics g)
+        {
+            Rectangle iconRectangle;
+            Rectangle textRectangle = new Rectangle(172, 18, 123, Height - 23);
+
+            if (RightToLeft == RightToLeft.Yes)
+            {
+                iconRectangle = new Rectangle(330, 15, 17, 17);
+                textRectangle.Offset(37, 0);
+            }
+            else
+            {
+                iconRectangle = new Rectangle(155, 15, 17, 17);
+            }
+
+            DrawFormIcon(g, iconRectangle);
+            DrawTabText(g, textRectangle, "Inactive Tab", InactiveTabTemplate.ForeColor, InactiveTabTemplate.Font);
+        }
+
+        private void DrawMouseOverTab(Graphics g)
+        {
+            Rectangle iconRectangle;
+            Rectangle textRectangle = new Rectangle(322, 18, 123, Height - 23);
+
+            if (RightToLeft == RightToLeft.Yes)
+            {
+                iconRectangle = new Rectangle(480, 15, 17, 17);
+                textRectangle.Offset(37, 0);
+            }
+            else
+            {
+                iconRectangle = new Rectangle(305, 15, 17, 17);
+            }
+
+            DrawFormIcon(g, iconRectangle);
+            DrawTabText(g, textRectangle, "MouseOver Tab", MouseOverTabTemplate.ForeColor, MouseOverTabTemplate.Font);
+        }
+
+        private void DrawCloseButton(Graphics g)
+        {
+            if (IsMouseOverCloseButton)
+            {
+                DrawActiveCloseButton(g);
+            }
+            else
+            {
+                DrawInactiveCloseButton(g);
+            }
+        }
+
+        private void DrawTabText(Graphics g, Rectangle rect, string text, Color color, Font font)
+        {
+            TextFormatFlags textFlags = TextFormatFlags.WordEllipsis | TextFormatFlags.EndEllipsis;
+
+            if (RightToLeft == RightToLeft.Yes)
+            {
+                textFlags = textFlags | TextFormatFlags.Right;
+            }
+            else
+            {
+                textFlags = textFlags | TextFormatFlags.Left;
+            }
+
+            TextRenderer.DrawText(g, text, font, rect, color, textFlags);
+        }
+
+        private void DrawFormIcon(Graphics g, Rectangle iconRectangle)
+        {
+            Icon icon = Resources.Document;
+
+            using (Bitmap bmp = new Bitmap(icon.Width, icon.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb))
+            {
+                using (Graphics bg = Graphics.FromImage(bmp))
+                {
+                    bg.DrawIcon(icon, 0, 0);
+                }
+
+                g.DrawImage(bmp, iconRectangle);
+            }
+        }
+
+        private void DrawInactiveCloseButton(Graphics g)
+        {
+            DrawCloseButtonGlyph(g, ActiveTabTemplate.CloseButtonForeColor);
+        }
+
+        private void DrawActiveCloseButton(Graphics g)
+        {
+            using (GraphicsPath gp = new GraphicsPath())
+            {
+                gp.AddLines(_closeButtonBounds);
+
+                using (SolidBrush backBrush = new SolidBrush(ActiveTabTemplate.CloseButtonBackColor))
+                {
+                    g.FillPath(backBrush, gp);
+                }
+
+                using (Pen borderPen = new Pen(ActiveTabTemplate.CloseButtonBorderColor))
+                {
+                    g.DrawPath(borderPen, gp);
+                }
+            }
+
+            DrawCloseButtonGlyph(g, ActiveTabTemplate.CloseButtonHotForeColor);
+        }
+
+        private void DrawCloseButtonGlyph(Graphics g, Color color)
+        {
+            g.SmoothingMode = SmoothingMode.None;
+
+            using (GraphicsPath shadow = new GraphicsPath())
+            {
+                Matrix translateMatrix = new Matrix();
+                Color shadowColor = Color.FromArgb(120, 130, 130, 130);
+
+                shadow.AddLines(_closeButtonGlyphBounds);
+                translateMatrix.Translate(1, 1);
+                shadow.Transform(translateMatrix);
+
+                using (SolidBrush shadowBrush = new SolidBrush(shadowColor))
+                {
+                    g.FillPath(shadowBrush, shadow);
+                }
+
+                using (Pen shadowPen = new Pen(shadowColor))
+                {
+                    g.DrawPath(shadowPen, shadow);
+                }
+            }
+
+            using (GraphicsPath gp = new GraphicsPath())
+            {
+                gp.AddLines(_closeButtonGlyphBounds);
+
+                using (SolidBrush glyphBrush = new SolidBrush(color))
+                {
+                    g.FillPath(glyphBrush, gp);
+                }
+
+                using (Pen glyphPen = new Pen(color))
+                {
+                    g.DrawPath(glyphPen, gp);
+                }
+            }
+
+            g.SmoothingMode = SmoothingMode.AntiAlias;
+        }
+
+        private void DrawTabBackground(Graphics g)
+        {
+            DrawInactiveTabBackground(g);
+            DrawMouseOverTabBackground(g);
+            DrawActiveTabBackground(g);
+        }
+
+        private void DrawActiveTabBackground(Graphics g)
+        {
+            Rectangle rect = DisplayRectangle;
+            Rectangle shadowRectangle = new Rectangle(0, Height - 5, Width, 5);
+            Blend shadowBlend = new Blend();
+
+            rect.Offset(0, 8);
+            rect.Height -= 8;
+            g.SmoothingMode = SmoothingMode.None;
+            shadowBlend.Factors = new float[] { 0.0F, 0.1F, 0.3F, 0.4F };
+            shadowBlend.Positions = new float[] { 0.0F, 0.5F, 0.8F, 1.0F };
+
+            using (GraphicsPath outerPath = new GraphicsPath())
+            {
+                outerPath.AddLines(_activeBounds);
+
+                using (LinearGradientBrush gradientbrush = new LinearGradientBrush(rect, Color.White, ActiveTabTemplate.BackColor, LinearGradientMode.Vertical))
+                {
+                    Blend bl = new Blend();
+                    bl.Factors = new float[] { 0.3F, 0.4F, 0.5F, 1.0F, 1.0F };
+                    bl.Positions = new float[] { 0.0F, 0.2F, 0.35F, 0.35F, 1.0F };
+
+                    gradientbrush.Blend = bl;
+                    g.FillPath(gradientbrush, outerPath);
+                }
+
+                using (LinearGradientBrush shadowBrush = new LinearGradientBrush(shadowRectangle, ActiveTabTemplate.BackColor, Color.Black, LinearGradientMode.Vertical))
+                {
+                    shadowBrush.Blend = shadowBlend;
+                    g.FillRectangle(shadowBrush, shadowRectangle);
+                }
+
+                g.SmoothingMode = SmoothingMode.AntiAlias;
+                g.DrawPath(new Pen(ActiveTabTemplate.BorderColor), outerPath);
+            }
+
+            using (GraphicsPath innerPath = new GraphicsPath())
+            {
+                innerPath.AddLines(_activeInnerBounds);
+
+                Color lineColor = Color.FromArgb(120, 255, 255, 255);
+                g.DrawPath(new Pen(lineColor), innerPath);
+            }
+        }
+
+        private void DrawMouseOverTabBackground(Graphics g)
+        {
+            Rectangle rect = DisplayRectangle;
+
+            rect.Offset(0, 8);
+            rect.Height -= 8;
+            g.SmoothingMode = SmoothingMode.None;
+
+            using (GraphicsPath outerPath = new GraphicsPath())
+            {
+                outerPath.AddLines(_mouseOverBounds);
+
+                using (LinearGradientBrush gradientbrush = new LinearGradientBrush(rect, Color.White, MouseOverTabTemplate.BackColor, LinearGradientMode.Vertical))
+                {
+                    Blend bl = new Blend();
+                    bl.Factors = new float[] { 0.3F, 0.4F, 0.5F, 1.0F, 0.8F, 0.7F };
+                    bl.Positions = new float[] { 0.0F, 0.2F, 0.4F, 0.4F, 0.8F, 1.0F };
+
+                    gradientbrush.Blend = bl;
+                    g.FillPath(gradientbrush, outerPath);
+                }
+
+                g.SmoothingMode = SmoothingMode.AntiAlias;
+                g.DrawPath(new Pen(InactiveTabTemplate.BorderColor), outerPath);
+            }
+
+            using (GraphicsPath innerPath = new GraphicsPath())
+            {
+                innerPath.AddLines(_mouseOverInnerBounds);
+
+                Color lineColor = Color.FromArgb(120, 255, 255, 255);
+                g.DrawPath(new Pen(lineColor), innerPath);
+            }
+        }
+
+        private void DrawInactiveTabBackground(Graphics g)
+        {
+            Rectangle rect = DisplayRectangle;
+
+            rect.Offset(0, 8);
+            rect.Height -= 8;
+            g.SmoothingMode = SmoothingMode.None;
+
+            using (GraphicsPath outerPath = new GraphicsPath())
+            {
+                outerPath.AddLines(_inactiveBounds);
+
+                using (LinearGradientBrush gradientbrush = new LinearGradientBrush(rect, Color.White, InactiveTabTemplate.BackColor, LinearGradientMode.Vertical))
+                {
+                    Blend bl = new Blend();
+                    bl.Factors = new float[] { 0.3F, 0.4F, 0.5F, 1.0F, 0.8F, 0.7F };
+                    bl.Positions = new float[] { 0.0F, 0.2F, 0.4F, 0.4F, 0.8F, 1.0F };
+
+                    gradientbrush.Blend = bl;
+                    g.FillPath(gradientbrush, outerPath);
+                }
+
+                g.SmoothingMode = SmoothingMode.AntiAlias;
+                g.DrawPath(new Pen(InactiveTabTemplate.BorderColor), outerPath);
+            }
+
+            using (GraphicsPath innerPath = new GraphicsPath())
+            {
+                innerPath.AddLines(_inactiveInnerBounds);
+
+                Color lineColor = Color.FromArgb(120, 255, 255, 255);
+                g.DrawPath(new Pen(lineColor), innerPath);
+            }
+        }
+
+        private bool ActiveHitTest(int x, int y)
+        {
+            bool hit = false;
+
+            using (GraphicsPath gp = new GraphicsPath())
+            {
+                gp.StartFigure();
+                gp.AddLines(_activeBounds);
+                gp.CloseFigure();
+
+                using (Pen borderpen = new Pen(Color.Black, 1))
+                {
+                    if (gp.IsOutlineVisible(x, y, borderpen) || gp.IsVisible(x, y))
+                    {
+                        hit = true;
+                    }
+                }
+            }
+
+            return hit;
+        }
+
+        private bool InactiveHitTest(int x, int y)
+        {
+            bool hit = false;
+
+            using (GraphicsPath gp = new GraphicsPath())
+            {
+                gp.StartFigure();
+                gp.AddLines(_inactiveBounds);
+                gp.CloseFigure();
+
+                using (Pen borderpen = new Pen(Color.Black, 1))
+                {
+                    if (gp.IsOutlineVisible(x, y, borderpen) || gp.IsVisible(x, y))
+                    {
+                        hit = true;
+                    }
+                }
+            }
+
+            return hit;
+        }
+
+        private bool MouseOverHitTest(int x, int y)
+        {
+            bool hit = false;
+
+            using (GraphicsPath gp = new GraphicsPath())
+            {
+                gp.StartFigure();
+                gp.AddLines(_mouseOverBounds);
+                gp.CloseFigure();
+
+                using (Pen borderpen = new Pen(Color.Black, 1))
+                {
+                    if (gp.IsOutlineVisible(x, y, borderpen) || gp.IsVisible(x, y))
+                    {
+                        hit = true;
+                    }
+                }
+            }
+
+            return hit;
+        }
+
+        private bool CloseButtonHitTest(int x, int y)
+        {
+            bool hit = false;
+
+            using (GraphicsPath gp = new GraphicsPath())
+            {
+                gp.StartFigure();
+                gp.AddLines(_closeButtonBounds);
+                gp.CloseFigure();
+
+                using (Pen borderpen = new Pen(Color.Black, 1))
+                {
+                    if (gp.IsOutlineVisible(x, y, borderpen) || gp.IsVisible(x, y))
+                    {
+                        hit = true;
+                    }
+                }
+            }
+
+            return hit;
+        }
+
+        private void _activeTemplate_OnPropertyChanged(object sender, EventArgs e)
+        {
+            Invalidate();
+        }
+
+        private void _inactiveTemplate_OnPropertyChanged(object sender, EventArgs e)
+        {
+            Invalidate();
+        }
+
+        private void _mouseOverTemplate_OnPropertyChanged(object sender, EventArgs e)
+        {
+            Invalidate();
         }
     }
 }

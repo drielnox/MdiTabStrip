@@ -5,14 +5,14 @@ using System.Text;
 
 namespace MdiTabStrip
 {
-    public class MdiTabStripTabEventArgs : EventArgs
+    internal class MdiTabStripTabClickedEventArgs
     {
-        private MdiTab tab;
+        private MdiTab mdiTab;
 
-        public MdiTabStripTabEventArgs(MdiTab tab)
+        public MdiTabStripTabClickedEventArgs(MdiTab mdiTab)
         {
             // TODO: Complete member initialization
-            this.tab = tab;
+            this.mdiTab = mdiTab;
         }
     }
 }

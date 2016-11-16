@@ -10,7 +10,7 @@ namespace MdiTabStrip.Design
         private Color _foreColor;
         private Font _font;
 
-        protected event EventHandler OnPropertyChanged;
+        internal event EventHandler OnPropertyChanged;
 
         [Category("Tab Appearance")]
         [Description("The background color of the tab.")]
