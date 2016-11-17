@@ -9,21 +9,21 @@ Namespace Design
             Set(ByVal value As MdiTabTemplateControl)
                 _template = value
 
-                _template.Location = New Point(Me.SplitContainer1.Panel1.Width / 2 - _template.Width / 2, Me.SplitContainer1.Panel1.Height / 2 - _template.Height / 2)
-                Me.SplitContainer1.Panel1.Controls.Clear()
-                Me.SplitContainer1.Panel1.Controls.Add(value)
-                Me.PropertyGrid1.SelectedObject = _template.ActiveTabTemplate
+                _template.Location = New Point(SplitContainer1.Panel1.Width / 2 - _template.Width / 2, SplitContainer1.Panel1.Height / 2 - _template.Height / 2)
+                SplitContainer1.Panel1.Controls.Clear()
+                SplitContainer1.Panel1.Controls.Add(value)
+                PropertyGrid1.SelectedObject = _template.ActiveTabTemplate
             End Set
         End Property
 
         Private Sub cboTabType_SelectedValueChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles cboTabType.SelectedValueChanged
             If _template IsNot Nothing Then
                 If cboTabType.SelectedItem = "Active Tab" Then
-                    Me.PropertyGrid1.SelectedObject = _template.ActiveTabTemplate
+                    PropertyGrid1.SelectedObject = _template.ActiveTabTemplate
                 ElseIf cboTabType.SelectedItem = "Inactive Tab" Then
-                    Me.PropertyGrid1.SelectedObject = _template.InactiveTabTemplate
+                    PropertyGrid1.SelectedObject = _template.InactiveTabTemplate
                 Else
-                    Me.PropertyGrid1.SelectedObject = _template.MouseOverTabTemplate
+                    PropertyGrid1.SelectedObject = _template.MouseOverTabTemplate
                 End If
             End If
         End Sub

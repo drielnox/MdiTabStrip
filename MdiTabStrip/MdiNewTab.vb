@@ -5,32 +5,32 @@ Public Class MdiNewTab
         MyBase.New(owner)
     End Sub
 
-    Friend Overrides Sub DrawControl(ByVal g As System.Drawing.Graphics)
+    Friend Overrides Sub DrawControl(ByVal g As Graphics)
         Dim tabImage As Image
 
-        If Me.ParentInternal.MdiNewTabImage Is Nothing Then
+        If ParentInternal.MdiNewTabImage Is Nothing Then
             tabImage = My.Resources.NewTab
         Else
-            tabImage = Me.ParentInternal.MdiNewTabImage
+            tabImage = ParentInternal.MdiNewTabImage
         End If
 
-        If Me.IsMouseOver Then
-            Dim iconRectangle As New Rectangle(Me.Width \ 2 - tabImage.Width \ 2, Me.Height \ 2 - tabImage.Height \ 2, tabImage.Width, tabImage.Height)
+        If IsMouseOver Then
+            Dim iconRectangle As New Rectangle(Width \ 2 - tabImage.Width \ 2, Height \ 2 - tabImage.Height \ 2, tabImage.Width, tabImage.Height)
 
-            iconRectangle.Offset(Me.Location)
+            iconRectangle.Offset(Location)
             g.DrawImage(tabImage, iconRectangle)
         End If
     End Sub
 
-    Protected Overrides Sub OnMouseDown(ByVal e As System.Windows.Forms.MouseEventArgs)
-        Me.ParentInternal.OnMdiNewTabClick()
+    Protected Overrides Sub OnMouseDown(ByVal e As MouseEventArgs)
+        ParentInternal.OnMdiNewTabClick()
     End Sub
 
-    Protected Overrides Sub OnMouseUp(ByVal e As System.Windows.Forms.MouseEventArgs)
+    Protected Overrides Sub OnMouseUp(ByVal e As MouseEventArgs)
         'Not implemented but overriden to bypass behavior in inherited class.
     End Sub
 
-    Protected Overrides Sub OnMouseMove(ByVal e As System.Windows.Forms.MouseEventArgs)
+    Protected Overrides Sub OnMouseMove(ByVal e As MouseEventArgs)
         'Not implemented but overriden to bypass behavior in inherited class.
     End Sub
 End Class

@@ -1,9 +1,6 @@
-﻿using Microsoft.VisualBasic;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Data;
-using System.Diagnostics;
 using System.ComponentModel;
 using System.Drawing.Drawing2D;
 using System.Drawing;
@@ -21,7 +18,6 @@ namespace MdiTabStrip
     [ToolboxBitmap(typeof(MdiTabStrip), "MdiTabStrip.bmp")]
     public class MdiTabStrip : ScrollableControl, ISupportInitialize
     {
-        #region "Fields"
         private TabStripLayoutEngine _layout;
         private MdiTab _activeTab;
         private MdiTabCollection _tabs = new MdiTabCollection();
@@ -31,7 +27,7 @@ namespace MdiTabStrip
         private int _minTabWidth = 80;
         private MdiTabStripItemBase _mouseOverControl = null;
         private ScrollDirection _dragDirection = ScrollDirection.Left;
-        private MdiScrollTab withEventsField__leftScrollTab = new MdiScrollTab(this, ScrollTabType.ScrollTabLeft);
+        private MdiScrollTab withEventsField__leftScrollTab;
         private MdiScrollTab _leftScrollTab
         {
             get { return withEventsField__leftScrollTab; }
@@ -48,8 +44,8 @@ namespace MdiTabStrip
                 }
             }
         }
-        private MdiScrollTab _dropDownScrollTab = new MdiScrollTab(this, ScrollTabType.ScrollTabDropDown);
-        private MdiScrollTab withEventsField__rightScrollTab = new MdiScrollTab(this, ScrollTabType.ScrollTabRight);
+        private MdiScrollTab _dropDownScrollTab;
+        private MdiScrollTab withEventsField__rightScrollTab;
         private MdiScrollTab _rightScrollTab
         {
             get { return withEventsField__rightScrollTab; }
@@ -66,7 +62,7 @@ namespace MdiTabStrip
                 }
             }
         }
-        private MdiNewTab _newTab = new MdiNewTab(this);
+        private MdiNewTab _newTab;
         private bool _mdiNewTabVisible = false;
         private int _mdiNewTabWidth = 25;
         private Image _mdiNewTabImage = null;
@@ -138,10 +134,9 @@ namespace MdiTabStrip
         }
         private List<Color> _backColorFadeArray = new List<Color>();
         private List<Color> _foreColorFadeArray;
-        #endregion
+
         private ArrayList _animatingTabs = new ArrayList();
 
-        #region "Events"
         /// <summary>
         /// Occurs when the <see cref="MdiTab"/> has been made active.
         /// </summary>
@@ -171,9 +166,7 @@ namespace MdiTabStrip
         /// Occurs when the <see cref="MdiNewTab"/> is clicked.
         /// </summary>
         public event EventHandler MdiNewTabClicked;
-        #endregion
 
-        #region "Constructor/Destructor"
         /// <summary>
         /// Initializes a new instance of the <see cref="MdiTabStrip"/> class.
         /// </summary>
@@ -199,6 +192,11 @@ namespace MdiTabStrip
             _dropDownScrollTab.Size = new Size(14, DisplayRectangle.Height);
             _rightScrollTab.Size = new Size(20, DisplayRectangle.Height);
             _newTab.Size = new Size(25, DisplayRectangle.Height);
+
+            _newTab = new MdiNewTab(this);
+            _dropDownScrollTab = new MdiScrollTab(this, ScrollTabType.ScrollTabDropDown);
+            withEventsField__rightScrollTab = new MdiScrollTab(this, ScrollTabType.ScrollTabRight);
+            withEventsField__leftScrollTab = new MdiScrollTab(this, ScrollTabType.ScrollTabLeft);
         }
 
         /// <summary>
@@ -231,9 +229,7 @@ namespace MdiTabStrip
 
             base.Dispose(disposing);
         }
-        #endregion
 
-        #region "ISupportInitialize implementation"
         //Initialization is used so that the top form can be found. This is needed in case the control
         //is added to a container control such as a panel.
 
@@ -259,16 +255,14 @@ namespace MdiTabStrip
                 parent.MdiChildActivate += MdiChildActivated;
             }
         }
-        #endregion
 
-        #region "Properties"
-
-        #region "Active Tab properties"
         /// <summary>
         /// Gets or sets the background color of the active tab.
         /// </summary>
         /// <returns>The background <see cref="Color"/> of the active <see cref="MdiTab"/>. The default value is LightSteelBlue.</returns>
-        [DefaultValue(typeof(Color), "LightSteelBlue"), Category("Active Tab"), Description("The background color of the currently active tab.")]
+        [DefaultValue(typeof(Color), "LightSteelBlue")]
+        [Category("Active Tab")]
+        [Description("The background color of the currently active tab.")]
         public Color ActiveTabColor
         {
             get { return _activeTabColor; }
@@ -283,7 +277,9 @@ namespace MdiTabStrip
         /// Gets or sets the foreground color of the active tab.
         /// </summary>
         /// <returns>The foreground <see cref="Color"/> of the active <see cref="MdiTab"/>. The default value is ControlText.</returns>
-        [DefaultValue(typeof(Color), "ControlText"), Category("Active Tab"), Description("The foreground color of the currently active tab, which is used to display text.")]
+        [DefaultValue(typeof(Color), "ControlText")]
+        [Category("Active Tab")]
+        [Description("The foreground color of the currently active tab, which is used to display text.")]
         public Color ActiveTabForeColor
         {
             get { return _activeTabForeColor; }
@@ -298,7 +294,9 @@ namespace MdiTabStrip
         /// Gets or sets the border color of the active tab.
         /// </summary>
         /// <returns>The border <see cref="Color"/> of the active <see cref="MdiTab"/>. The default value is Gray.</returns>
-        [DefaultValue(typeof(Color), "Gray"), Category("Active Tab"), Description("The border color of the currently active tab.")]
+        [DefaultValue(typeof(Color), "Gray")]
+        [Category("Active Tab")]
+        [Description("The border color of the currently active tab.")]
         public Color ActiveTabBorderColor
         {
             get { return _activeTabBorderColor; }
@@ -313,7 +311,9 @@ namespace MdiTabStrip
         /// Gets or sets the font of the active tab.
         /// </summary>
         /// <returns>The <see cref="Font"/> to apply to the text displayed by the active <see cref="MdiTab"/>. The value returned will vary depending on the user's operating system the local culture setting of their system.</returns>
-        [DefaultValue(typeof(Font), "SystemFonts.DefaultFont"), Category("Active Tab"), Description("The font used to display text in the currently active tab.")]
+        [DefaultValue(typeof(Font), "SystemFonts.DefaultFont")]
+        [Category("Active Tab")]
+        [Description("The font used to display text in the currently active tab.")]
         public Font ActiveTabFont
         {
             get { return _activeTabFont; }
@@ -328,7 +328,9 @@ namespace MdiTabStrip
         /// Gets or sets the background color of the close button.
         /// </summary>
         /// <returns>The background <see cref="Color"/> of the close button. The default value is Gainsboro.</returns>
-        [DefaultValue(typeof(Color), "Gainsboro"), Category("Active Tab"), Description("The background color of the close button when moused over.")]
+        [DefaultValue(typeof(Color), "Gainsboro")]
+        [Category("Active Tab")]
+        [Description("The background color of the close button when moused over.")]
         public Color CloseButtonBackColor
         {
             get { return _closeButtonBackColor; }
@@ -339,7 +341,9 @@ namespace MdiTabStrip
         /// Gets or sets the foreground color of the close button.
         /// </summary>
         /// <returns>The foreground <see cref="Color"/> of the close button. The default value is ControlText.</returns>
-        [DefaultValue(typeof(Color), "ControlText"), Category("Active Tab"), Description("The foreground color of the close button, used to display the glyph.")]
+        [DefaultValue(typeof(Color), "ControlText")]
+        [Category("Active Tab")]
+        [Description("The foreground color of the close button, used to display the glyph.")]
         public Color CloseButtonForeColor
         {
             get { return _closeButtonForeColor; }
@@ -354,7 +358,9 @@ namespace MdiTabStrip
         /// Gets or sets the foreground color of the close button when the mouse cursor is hovered over it.
         /// </summary>
         /// <returns>The foreground <see cref="Color"/> of the close button when hovered over. The default value is Firebrick.</returns>
-        [DefaultValue(typeof(Color), "Firebrick"), Category("Active Tab"), Description("The foreground color of the close button when moused over, used to display the glyph.")]
+        [DefaultValue(typeof(Color), "Firebrick")]
+        [Category("Active Tab")]
+        [Description("The foreground color of the close button when moused over, used to display the glyph.")]
         public Color CloseButtonHotForeColor
         {
             get { return _closeButtonHotForeColor; }
@@ -365,20 +371,22 @@ namespace MdiTabStrip
         /// Gets or sets the border color of the close button.
         /// </summary>
         /// <returns>The border <see cref="Color"/> of the close button. The default value is Gray.</returns>
-        [DefaultValue(typeof(Color), "Gray"), Category("Active Tab"), Description("The border color of the close button when moused over.")]
+        [DefaultValue(typeof(Color), "Gray")]
+        [Category("Active Tab")]
+        [Description("The border color of the close button when moused over.")]
         public Color CloseButtonBorderColor
         {
             get { return _closeButtonBorderColor; }
             set { _closeButtonBorderColor = value; }
         }
-        #endregion
 
-        #region "Inactive Tab properties"
         /// <summary>
         /// Gets or sets the background color of the inactive tab.
         /// </summary>
         /// <returns>The background <see cref="Color"/> of the inactive <see cref="MdiTab"/>. The default value is Gainsboro.</returns>
-        [DefaultValue(typeof(Color), "Gainsboro"), Category("Inactive Tab"), Description("The background color of all inactive tabs.")]
+        [DefaultValue(typeof(Color), "Gainsboro")]
+        [Category("Inactive Tab")]
+        [Description("The background color of all inactive tabs.")]
         public Color InactiveTabColor
         {
             get { return _inactiveTabColor; }
@@ -394,7 +402,9 @@ namespace MdiTabStrip
         /// Gets or sets the foreground color of the inactive tab.
         /// </summary>
         /// <returns>The foreground <see cref="Color"/> of the inactive <see cref="MdiTab"/>. The default value is ControlText.</returns>
-        [DefaultValue(typeof(Color), "ControlText"), Category("Inactive Tab"), Description("The foreground color of all inactive tabs, which is used to display text.")]
+        [DefaultValue(typeof(Color), "ControlText")]
+        [Category("Inactive Tab")]
+        [Description("The foreground color of all inactive tabs, which is used to display text.")]
         public Color InactiveTabForeColor
         {
             get { return _inactiveTabForeColor; }
@@ -410,7 +420,9 @@ namespace MdiTabStrip
         /// Gets or sets the border color of the inactive tab.
         /// </summary>
         /// <returns>The border <see cref="Color"/> of the inactive <see cref="MdiTab"/>. The default value is Silver.</returns>
-        [DefaultValue(typeof(Color), "Silver"), Category("Inactive Tab"), Description("The border color of all inactive tabs.")]
+        [DefaultValue(typeof(Color), "Silver")]
+        [Category("Inactive Tab")]
+        [Description("The border color of all inactive tabs.")]
         public Color InactiveTabBorderColor
         {
             get { return _inactiveTabBorderColor; }
@@ -425,7 +437,9 @@ namespace MdiTabStrip
         /// Gets or sets the font of the inactive tab.
         /// </summary>
         /// <returns>The <see cref="Font"/> to apply to the text displayed by the inactive <see cref="MdiTab"/>. The value returned will vary depending on the user's operating system the local culture setting of their system.</returns>
-        [DefaultValue(typeof(Font), "SytemFonts.DefaultFont"), Category("Inactive Tab"), Description("The font used to display text in all inactive tabs.")]
+        [DefaultValue(typeof(Font), "SytemFonts.DefaultFont")]
+        [Category("Inactive Tab")]
+        [Description("The font used to display text in all inactive tabs.")]
         public Font InactiveTabFont
         {
             get { return _inactiveTabFont; }
@@ -435,14 +449,14 @@ namespace MdiTabStrip
                 Invalidate();
             }
         }
-        #endregion
 
-        #region "Mouseover Tab properties"
         /// <summary>
         /// Gets or sets the background color of the moused over tab.
         /// </summary>
         /// <returns>The background <see cref="Color"/> of the moused over <see cref="MdiTab"/>. The default value is LightSteelBlue.</returns>
-        [DefaultValue(typeof(Color), "LightSteelBlue"), Category("Mouse Over Tab"), Description("The background color for the tab the mouse cursor is currently over.")]
+        [DefaultValue(typeof(Color), "LightSteelBlue")]
+        [Category("Mouse Over Tab")]
+        [Description("The background color for the tab the mouse cursor is currently over.")]
         public Color MouseOverTabColor
         {
             get { return _mouseOverTabColor; }
@@ -458,7 +472,9 @@ namespace MdiTabStrip
         /// Gets or sets the foreground color of the moused over tab.
         /// </summary>
         /// <returns>The foreground <see cref="Color"/> of the moused over <see cref="MdiTab"/>. The default value is ControlText.</returns>
-        [DefaultValue(typeof(Color), "ControlText"), Category("Mouse Over Tab"), Description("The foreground color of the tab the mouse cursor is currently over, which is used to display text and glyphs.")]
+        [DefaultValue(typeof(Color), "ControlText")]
+        [Category("Mouse Over Tab")]
+        [Description("The foreground color of the tab the mouse cursor is currently over, which is used to display text and glyphs.")]
         public Color MouseOverTabForeColor
         {
             get { return _mouseOverTabForeColor; }
@@ -474,7 +490,9 @@ namespace MdiTabStrip
         /// Gets or sets the font of the moused over tab.
         /// </summary>
         /// <returns>The <see cref="Font"/> to apply to the text displayed by the moused over <see cref="MdiTab"/>. The value returned will vary depending on the user's operating system the local culture setting of their system.</returns>
-        [DefaultValue(typeof(Font), "SystemFonts.DefaultFont"), Category("Mouse Over Tab"), Description("The font used to display text in the tab the mouse cursor is currently over.")]
+        [DefaultValue(typeof(Font), "SystemFonts.DefaultFont")]
+        [Category("Mouse Over Tab")]
+        [Description("The font used to display text in the tab the mouse cursor is currently over.")]
         public Font MouseOverTabFont
         {
             get { return _mouseOverTabFont; }
@@ -484,9 +502,7 @@ namespace MdiTabStrip
                 Invalidate();
             }
         }
-        #endregion
 
-        #region "ScrollTab properties"
         [Browsable(false)]
         public MdiScrollTab LeftScrollTab
         {
@@ -504,7 +520,6 @@ namespace MdiTabStrip
         {
             get { return _dropDownScrollTab; }
         }
-        #endregion
 
         [Browsable(false)]
         public MdiNewTab MdiNewTab
@@ -549,7 +564,8 @@ namespace MdiTabStrip
         /// Gets or sets if the control should animate between the inactive and moused over background colors.
         /// </summary>
         /// <returns>true if the should animate; otherwise, false. The default is true.</returns>
-        [DefaultValue(true), Category("Behavior")]
+        [DefaultValue(true)]
+        [Category("Behavior")]
         public bool Animate
         {
             get { return _animate; }
@@ -560,7 +576,8 @@ namespace MdiTabStrip
         /// Gets or sets a value indicating whether an icon is displayed on the tab for the form.
         /// </summary>
         /// <returns>true if the control displays an icon in the tab; otherwise, false. The default is true.</returns>
-        [DefaultValue(true), Category("Appearance")]
+        [DefaultValue(true)]
+        [Category("Appearance")]
         public bool DisplayFormIcon
         {
             get { return _displayFormIcon; }
@@ -575,7 +592,8 @@ namespace MdiTabStrip
         /// Gets or sets a <see cref="ToolStripRenderer"/> used to customize the look and feel of the <see cref="MdiTabStrip"/>'s drop down.
         /// </summary>
         /// <returns>A <see cref="ToolStripRenderer"/> used to customize the look and feel of a <see cref="MdiTabStrip"/>'s drop down.</returns>
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden), Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [Browsable(false)]
         public ToolStripRenderer DropDownRenderer
         {
             get { return _dropDownScrollTab.MdiMenu.Renderer; }
@@ -597,7 +615,9 @@ namespace MdiTabStrip
         /// </summary>
         /// <returns>normal if each form's WindowState and ControlBox property settings should be obeyed; otherwise, 
         /// maximized, to force all forms to be maximized in the MDI window. The default is normal.</returns>
-        [DefaultValue(typeof(MdiChildWindowState), "Normal"), Category("Layout"), Description("Gets or sets the desired window state of all child forms")]
+        [DefaultValue(typeof(MdiChildWindowState), "Normal")]
+        [Category("Layout")]
+        [Description("Gets or sets the desired window state of all child forms")]
         public MdiChildWindowState MdiWindowState
         {
             get { return _mdiWindowState; }
@@ -608,7 +628,9 @@ namespace MdiTabStrip
         /// Gets or sets the permanance of the tab.
         /// </summary>
         /// <returns>first if the first tab open should not be closeable, last open if the last remaining tab should not be closeable; otherwise none. The default is all tabs are closeable.</returns>
-        [DefaultValue(typeof(MdiTabPermanence), "None"), Category("Behavior"), Description("Defines how the control will handle the closing of tabs. The first tab or the last remaining tab can be restricted from closing or a setting of 'None' will allow all tabs to be closed.")]
+        [DefaultValue(typeof(MdiTabPermanence), "None")]
+        [Category("Behavior")]
+        [Description("Defines how the control will handle the closing of tabs. The first tab or the last remaining tab can be restricted from closing or a setting of 'None' will allow all tabs to be closed.")]
         public MdiTabPermanence TabPermanence
         {
             get { return _tabPermanence; }
@@ -622,7 +644,9 @@ namespace MdiTabStrip
         /// <summary>
         /// Gets or sets the visibility of the <see cref="MdiNewTab"/>.
         /// </summary>
-        [DefaultValue(false), Category("Appearance"), Description("Gets or sets whether or not the control will display the MdiNewTab.")]
+        [DefaultValue(false)]
+        [Category("Appearance")]
+        [Description("Gets or sets whether or not the control will display the MdiNewTab.")]
         public bool MdiNewTabVisible
         {
             get { return _mdiNewTabVisible; }
@@ -643,7 +667,9 @@ namespace MdiTabStrip
         /// <value></value>
         /// <returns></returns>
         /// <remarks></remarks>
-        [DefaultValue(25), Category("Layout"), Description("Gets or sets the width of the MdiNewTab.")]
+        [DefaultValue(25)]
+        [Category("Layout")]
+        [Description("Gets or sets the width of the MdiNewTab.")]
         public int MdiNewTabWidth
         {
             //Return Me._mdiNewTabWidth
@@ -665,7 +691,8 @@ namespace MdiTabStrip
         /// <value></value>
         /// <returns></returns>
         /// <remarks></remarks>
-        [Category("Appearance"), Description("Gets or sets the image for the MdiNewTab.")]
+        [Category("Appearance")]
+        [Description("Gets or sets the image for the MdiNewTab.")]
         public Image MdiNewTabImage
         {
             get { return _mdiNewTabImage; }
@@ -705,7 +732,9 @@ namespace MdiTabStrip
         /// </summary>
         /// <returns>The maximum width a tab can be sized to. The default value is 200.</returns>
         /// <remarks>This property affects the tab's size when resizing the control and is used in conjunction with the <seealso cref="MinTabWidth"/> property.</remarks>
-        [DefaultValue(200), Category("Layout"), Description("The maximum width for each tab.")]
+        [DefaultValue(200)]
+        [Category("Layout")]
+        [Description("The maximum width for each tab.")]
         public int MaxTabWidth
         {
             get { return _maxTabWidth; }
@@ -717,7 +746,9 @@ namespace MdiTabStrip
         /// </summary>
         /// <returns>The minimum width a tab can be sized to. The default is 80.</returns>
         /// <remarks>This property affects the tab's size when resizing the control and is used in conjunction with the <seealso cref="MaxTabWidth"/> property.</remarks>
-        [DefaultValue(80), Category("Layout"), Description("The minimum width for each tab.")]
+        [DefaultValue(80)]
+        [Category("Layout")]
+        [Description("The minimum width for each tab.")]
         public int MinTabWidth
         {
             get { return _minTabWidth; }
@@ -728,7 +759,8 @@ namespace MdiTabStrip
         /// Gets or sets the active tab.
         /// </summary>
         /// <returns>The <see cref="MdiTab"/> that is currenly active.</returns>
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden), Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [Browsable(false)]
         public MdiTab ActiveTab
         {
             get { return _activeTab; }
@@ -742,7 +774,8 @@ namespace MdiTabStrip
             }
         }
 
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden), Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [Browsable(false)]
         internal bool IsDragging
         {
             get { return _isDragging; }
@@ -772,7 +805,9 @@ namespace MdiTabStrip
         /// <summary>
         /// Specifies whether to display ToolTips on tabs.
         /// </summary>
-        [DefaultValue(true), Category("Behavior"), Description("Specifies whether to display ToolTips on tabs.")]
+        [DefaultValue(true)]
+        [Category("Behavior")]
+        [Description("Specifies whether to display ToolTips on tabs.")]
         public bool ShowTabToolTip
         {
             get { return _showTabToolTip; }
@@ -782,17 +817,14 @@ namespace MdiTabStrip
         /// <summary>
         /// Gets or sets the ToolTip text of the <see cref="MdiNewTab"/>.
         /// </summary>
-        [Category("Behavior"), Description("Gets or sets the ToolTip text of the MdiNewTab.")]
+        [Category("Behavior")]
+        [Description("Gets or sets the ToolTip text of the MdiNewTab.")]
         public string NewTabToolTipText
         {
             get { return _newTabToolTipText; }
             set { _newTabToolTipText = value; }
         }
-        #endregion
 
-        #region "Methods"
-
-        #region "Form Event Handlers"
         protected void MdiChildActivated(object sender, EventArgs e)
         {
             Form f = ((Form)sender).ActiveMdiChild;
@@ -829,7 +861,7 @@ namespace MdiTabStrip
             //Find the menu item that cooresponds to this form and update it's Text property.
             //Can't override the menuitem's Text property to return the Form.Text property because when
             //the form's text property is changed the drop down menu does not resize itself accordingly.
-            foreach (MdiMenuItem mi in _dropDownScrollTab._mdiMenu.Items)
+            foreach (MdiMenuItem mi in _dropDownScrollTab.MdiMenu.Items)
             {
                 if (object.ReferenceEquals(mi.Form, f))
                 {
@@ -862,11 +894,11 @@ namespace MdiTabStrip
                     ActiveTab = t;
 
                     //Find the menu item of the drop down menu and set it's Checked property
-                    foreach (MdiMenuItem mi in _dropDownScrollTab._mdiMenu.Items)
+                    foreach (MdiMenuItem mi in _dropDownScrollTab.MdiMenu.Items)
                     {
                         if (object.ReferenceEquals(mi.Form, mdiForm))
                         {
-                            _dropDownScrollTab._mdiMenu.SetItemChecked(mi);
+                            _dropDownScrollTab.MdiMenu.SetItemChecked(mi);
                             break; // TODO: might not be correct. Was : Exit For
                         }
                     }
@@ -927,11 +959,11 @@ namespace MdiTabStrip
                     OnMdiTabRemoved(new MdiTabStripTabEventArgs(tab));
 
                     //Remove the cooresponding menu item from the drop down menu.
-                    foreach (MdiMenuItem mi in _dropDownScrollTab._mdiMenu.Items)
+                    foreach (MdiMenuItem mi in _dropDownScrollTab.MdiMenu.Items)
                     {
                         if (object.ReferenceEquals(mi.Form, tab.Form))
                         {
-                            _dropDownScrollTab._mdiMenu.Items.Remove(mi);
+                            _dropDownScrollTab.MdiMenu.Items.Remove(mi);
                             break; // TODO: might not be correct. Was : Exit For
                         }
                     }
@@ -970,11 +1002,7 @@ namespace MdiTabStrip
                 RemoveTab((Form)sender);
             }
         }
-        #endregion
 
-        #region "Paint Methods"
-
-        #region "ToolTip painting"
         private void _toolTip_Popup(object sender, PopupEventArgs e)
         {
             Size s = TextRenderer.MeasureText(_toolTip.GetToolTip(e.AssociatedControl), SystemFonts.SmallCaptionFont);
@@ -998,7 +1026,6 @@ namespace MdiTabStrip
             e.Graphics.DrawRectangle(SystemPens.ControlDarkDark, rect);
             e.DrawText();
         }
-        #endregion
 
         protected override void OnPaint(PaintEventArgs e)
         {
@@ -1043,29 +1070,29 @@ namespace MdiTabStrip
                 {
                     //Glyphs need to be located on the left side of the tab
                     topTriangle = new Point[] {
-					new Point(mditab.Left - 3, 0),
-					new Point(mditab.Left + 3, 0),
-					new Point(mditab.Left, 5)
-				};
+                    new Point(mditab.Left - 3, 0),
+                    new Point(mditab.Left + 3, 0),
+                    new Point(mditab.Left, 5)
+                };
                     bottomTriangle = new Point[] {
-					new Point(mditab.Left - 3, Height - 1),
-					new Point(mditab.Left + 3, Height - 1),
-					new Point(mditab.Left, Height - 6)
-				};
+                    new Point(mditab.Left - 3, Height - 1),
+                    new Point(mditab.Left + 3, Height - 1),
+                    new Point(mditab.Left, Height - 6)
+                };
                 }
                 else
                 {
                     //Glyphs need to be located on the right side of the tab
                     topTriangle = new Point[] {
-					new Point(mditab.Right - 3, 0),
-					new Point(mditab.Right + 3, 0),
-					new Point(mditab.Right, 5)
-				};
+                    new Point(mditab.Right - 3, 0),
+                    new Point(mditab.Right + 3, 0),
+                    new Point(mditab.Right, 5)
+                };
                     bottomTriangle = new Point[] {
-					new Point(mditab.Right - 3, Height - 1),
-					new Point(mditab.Right + 3, Height - 1),
-					new Point(mditab.Right, Height - 6)
-				};
+                    new Point(mditab.Right - 3, Height - 1),
+                    new Point(mditab.Right + 3, Height - 1),
+                    new Point(mditab.Right, Height - 6)
+                };
                 }
 
                 e.Graphics.FillPolygon(Brushes.Black, topTriangle);
@@ -1111,9 +1138,7 @@ namespace MdiTabStrip
                 ActiveTab.DrawControlBackground(e.Graphics);
             }
         }
-        #endregion
 
-        #region "Fade Animation"
         /// <summary>
         /// This method creates a Bitmap using the duration field as the width and creates a LinearGradientBrush
         /// using the colors passed in as parameters. It then fills the bitmap using
@@ -1208,9 +1233,7 @@ namespace MdiTabStrip
                 _timer.Enabled = false;
             }
         }
-        #endregion
 
-        #region "Mouse Events"
         /// <summary>
         /// Determines which tab the cursor is over, sends the appropriate MouseEvent to it and caches the tab.
         /// When the cached tab doesn't match the one the cursor is over then MouseLeave is invoked for this tab
@@ -1399,9 +1422,6 @@ namespace MdiTabStrip
             _toolTip.Show(tipText, this, base.PointToClient(location), _toolTip.AutoPopDelay);
         }
 
-        #endregion
-
-        #region "Drag Drop Methods"
         protected override void OnDragOver(DragEventArgs drgevent)
         {
             if (!drgevent.Data.GetDataPresent(typeof(MdiTab)))
@@ -1464,7 +1484,7 @@ namespace MdiTabStrip
                             {
                                 if (currentIndex <= activeIndex)
                                 {
-                                    int a = tab.Location.X + (tab.Width * 0.2);
+                                    double a = tab.Location.X + (tab.Width * 0.2);
 
                                     _dragDirection = ScrollDirection.Right;
 
@@ -1482,7 +1502,7 @@ namespace MdiTabStrip
                                 }
                                 else
                                 {
-                                    int b = tab.Location.X + (tab.Width * 0.8);
+                                    double b = tab.Location.X + (tab.Width * 0.8);
 
                                     _dragDirection = ScrollDirection.Left;
 
@@ -1511,7 +1531,7 @@ namespace MdiTabStrip
                             {
                                 if (currentIndex <= activeIndex)
                                 {
-                                    int a = tab.Location.X + (tab.Width * 0.8);
+                                    double a = tab.Location.X + (tab.Width * 0.8);
 
                                     _dragDirection = ScrollDirection.Left;
 
@@ -1529,7 +1549,7 @@ namespace MdiTabStrip
                                 }
                                 else
                                 {
-                                    int b = tab.Location.X + (tab.Width * 0.2);
+                                    double b = tab.Location.X + (tab.Width * 0.2);
 
                                     _dragDirection = ScrollDirection.Right;
 
@@ -1584,12 +1604,12 @@ namespace MdiTabStrip
                         PerformLayout();
 
                         Form f = tab.Form;
-                        foreach (MdiMenuItem mi in DropDownTab._mdiMenu.Items)
+                        foreach (MdiMenuItem mi in DropDownTab.MdiMenu.Items)
                         {
                             if (object.ReferenceEquals(mi.Form, f))
                             {
-                                DropDownTab._mdiMenu.Items.Remove(mi);
-                                DropDownTab._mdiMenu.Items.Insert(_indexOfTabForDrop, mi);
+                                DropDownTab.MdiMenu.Items.Remove(mi);
+                                DropDownTab.MdiMenu.Items.Insert(_indexOfTabForDrop, mi);
                                 break; // TODO: might not be correct. Was : Exit For
                             }
                         }
@@ -1604,9 +1624,7 @@ namespace MdiTabStrip
             IsDragging = false;
             Invalidate();
         }
-        #endregion
 
-        #region "ContextMenu methods"
         private void AddMdiItem(Form f, MdiTab tab)
         {
             MdiMenuItem item = new MdiMenuItem(tab, new EventHandler(MenuItemClick));
@@ -1620,16 +1638,16 @@ namespace MdiTabStrip
 
             item.Image = bmp;
             item.Text = f.Text;
-            _dropDownScrollTab._mdiMenu.Items.Add(item);
+            _dropDownScrollTab.MdiMenu.Items.Add(item);
         }
 
         private void RemoveMdiItem(Form f)
         {
-            foreach (MdiMenuItem mi in _dropDownScrollTab._mdiMenu.Items)
+            foreach (MdiMenuItem mi in _dropDownScrollTab.MdiMenu.Items)
             {
                 if (object.ReferenceEquals(mi.Form, f))
                 {
-                    _dropDownScrollTab._mdiMenu.Items.Remove(mi);
+                    _dropDownScrollTab.MdiMenu.Items.Remove(mi);
                     break; // TODO: might not be correct. Was : Exit For
                 }
             }
@@ -1659,9 +1677,7 @@ namespace MdiTabStrip
                 UpdateTabVisibility(direction);
             }
         }
-        #endregion
 
-        #region "Navigation button Events"
         private void leftTabScroll_ScrollTab(ScrollDirection direction)
         {
             ScrollTabHandler(direction);
@@ -1929,17 +1945,13 @@ namespace MdiTabStrip
 
             return w;
         }
-        #endregion
 
-        #region "Resize"
         protected override void OnResize(System.EventArgs e)
         {
             base.OnResize(e);
             UpdateTabVisibility(ScrollDirection.None);
         }
-        #endregion
 
-        #region "Control Events"
         protected internal virtual void OnMdiTabAdded(MdiTabStripTabEventArgs e)
         {
             if (MdiTabAdded != null)
@@ -1987,8 +1999,5 @@ namespace MdiTabStrip
                 MdiNewTabClicked(_newTab, new EventArgs());
             }
         }
-        #endregion
-
-        #endregion
     }
 }

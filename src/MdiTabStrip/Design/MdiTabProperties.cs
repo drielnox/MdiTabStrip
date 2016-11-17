@@ -1,9 +1,9 @@
-﻿using System;
-using System.ComponentModel;
-using System.Drawing;
-
-namespace MdiTabStrip.Design
+﻿namespace MdiTabStrip.Design
 {
+    using System;
+    using System.ComponentModel;
+    using System.Drawing;
+
     public class MdiTabProperties
     {
         private Color _backColor;
@@ -17,6 +17,7 @@ namespace MdiTabStrip.Design
         public Color BackColor
         {
             get { return _backColor; }
+
             set
             {
                 if (_backColor != value)
@@ -32,6 +33,7 @@ namespace MdiTabStrip.Design
         public Color ForeColor
         {
             get { return _foreColor; }
+
             set
             {
                 if (_foreColor != value)
@@ -47,6 +49,7 @@ namespace MdiTabStrip.Design
         public Font Font
         {
             get { return _font; }
+
             set
             {
                 if (_font != value)
@@ -59,10 +62,7 @@ namespace MdiTabStrip.Design
 
         protected void InvokePropertyChanged()
         {
-            if (OnPropertyChanged != null)
-            {
-                OnPropertyChanged(this, EventArgs.Empty);
-            }
+            OnPropertyChanged?.Invoke(this, EventArgs.Empty);
         }
     }
 }

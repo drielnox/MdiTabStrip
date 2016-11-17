@@ -104,25 +104,25 @@ Public Class MdiTabStrip
     Public Sub New()
         MyBase.New()
 
-        Me.ResizeRedraw = True
-        Me.DoubleBuffered = True
-        Me.MinimumSize = New Size(50, 33)
-        Me.Dock = DockStyle.Top
-        Me.AllowDrop = True
+        ResizeRedraw = True
+        DoubleBuffered = True
+        MinimumSize = New Size(50, 33)
+        Dock = DockStyle.Top
+        AllowDrop = True
         'Padding values directly affect the tab's placement, change these in the designer to see
         'how the tab's size and placement change.
-        Me.Padding = New Padding(5, 3, 20, 5)
-        Me.m_timer.Interval = 2
-        Me.m_backColorFadeArray = Me.GetFadeSteps(Me.m_inactiveTabColor, Me.m_mouseOverTabColor)
-        Me.m_foreColorFadeArray = Me.GetFadeSteps(Me.m_inactiveTabForeColor, Me.m_mouseOverTabForeColor)
-        Me.m_toolTip.AutoPopDelay = 2000
-        Me.m_toolTip.OwnerDraw = True
+        Padding = New Padding(5, 3, 20, 5)
+        m_timer.Interval = 2
+        m_backColorFadeArray = GetFadeSteps(m_inactiveTabColor, m_mouseOverTabColor)
+        m_foreColorFadeArray = GetFadeSteps(m_inactiveTabForeColor, m_mouseOverTabForeColor)
+        m_toolTip.AutoPopDelay = 2000
+        m_toolTip.OwnerDraw = True
 
         'Setup scrolltab sizes
-        Me.m_leftScrollTab.Size = New Size(20, Me.DisplayRectangle.Height)
-        Me.m_dropDownScrollTab.Size = New Size(14, Me.DisplayRectangle.Height)
-        Me.m_rightScrollTab.Size = New Size(20, Me.DisplayRectangle.Height)
-        Me.m_newTab.Size = New Size(25, Me.DisplayRectangle.Height)
+        m_leftScrollTab.Size = New Size(20, DisplayRectangle.Height)
+        m_dropDownScrollTab.Size = New Size(14, DisplayRectangle.Height)
+        m_rightScrollTab.Size = New Size(20, DisplayRectangle.Height)
+        m_newTab.Size = New Size(25, DisplayRectangle.Height)
     End Sub
 
     ''' <summary>
@@ -130,23 +130,23 @@ Public Class MdiTabStrip
     ''' </summary>
     Protected Overrides Sub Dispose(ByVal disposing As Boolean)
         If disposing Then
-            Me.LeftScrollTab.Dispose()
-            Me.DropDownTab.Dispose()
-            Me.RightScrollTab.Dispose()
-            Me.MdiNewTab.Dispose()
-            Me.m_toolTip.Dispose()
+            LeftScrollTab.Dispose()
+            DropDownTab.Dispose()
+            RightScrollTab.Dispose()
+            MdiNewTab.Dispose()
+            m_toolTip.Dispose()
 
-            Me.m_activeTabFont.Dispose()
-            Me.m_inactiveTabFont.Dispose()
-            Me.m_mouseOverTabFont.Dispose()
+            m_activeTabFont.Dispose()
+            m_inactiveTabFont.Dispose()
+            m_mouseOverTabFont.Dispose()
 
-            Me.m_timer.Dispose()
+            m_timer.Dispose()
 
-            Dim parent As Form = Me.FindForm
+            Dim parent As Form = FindForm
 
             If parent IsNot Nothing Then
                 'Unhook event handler registered with the top form.
-                RemoveHandler parent.MdiChildActivate, AddressOf Me.MdiChildActivated
+                RemoveHandler parent.MdiChildActivate, AddressOf MdiChildActivated
             End If
         End If
 
@@ -162,19 +162,19 @@ Public Class MdiTabStrip
     ''' Signals the object that initialization is starting.
     ''' </summary>
     Public Sub BeginInit() Implements System.ComponentModel.ISupportInitialize.BeginInit
-        Me.SuspendLayout()
+        SuspendLayout()
     End Sub
 
     ''' <summary>
     ''' Signals the object that initialization is complete.
     ''' </summary>
     Public Sub EndInit() Implements System.ComponentModel.ISupportInitialize.EndInit
-        Me.ResumeLayout()
-        Dim parent As Form = Me.FindForm
+        ResumeLayout()
+        Dim parent As Form = FindForm
 
         If parent IsNot Nothing Then
             'Register event handler with top form.
-            AddHandler parent.MdiChildActivate, AddressOf Me.MdiChildActivated
+            AddHandler parent.MdiChildActivate, AddressOf MdiChildActivated
         End If
     End Sub
 #End Region
@@ -191,11 +191,11 @@ Public Class MdiTabStrip
     Description("The background color of the currently active tab.")> _
     Public Property ActiveTabColor() As Color
         Get
-            Return Me.m_activeTabColor
+            Return m_activeTabColor
         End Get
         Set(ByVal value As Color)
-            Me.m_activeTabColor = value
-            Me.Invalidate()
+            m_activeTabColor = value
+            Invalidate()
         End Set
     End Property
 
@@ -208,11 +208,11 @@ Public Class MdiTabStrip
     Description("The foreground color of the currently active tab, which is used to display text.")> _
     Public Property ActiveTabForeColor() As Color
         Get
-            Return Me.m_activeTabForeColor
+            Return m_activeTabForeColor
         End Get
         Set(ByVal value As Color)
-            Me.m_activeTabForeColor = value
-            Me.Invalidate()
+            m_activeTabForeColor = value
+            Invalidate()
         End Set
     End Property
 
@@ -225,10 +225,10 @@ Public Class MdiTabStrip
     Description("The border color of the currently active tab.")> _
     Public Property ActiveTabBorderColor() As Color
         Get
-            Return Me.m_activeTabBorderColor
+            Return m_activeTabBorderColor
         End Get
         Set(ByVal value As Color)
-            Me.m_activeTabBorderColor = value
+            m_activeTabBorderColor = value
             Invalidate()
         End Set
     End Property
@@ -242,11 +242,11 @@ Public Class MdiTabStrip
     Description("The font used to display text in the currently active tab.")> _
     Public Property ActiveTabFont() As Font
         Get
-            Return Me.m_activeTabFont
+            Return m_activeTabFont
         End Get
         Set(ByVal value As Font)
-            Me.m_activeTabFont = value
-            Me.Invalidate()
+            m_activeTabFont = value
+            Invalidate()
         End Set
     End Property
 
@@ -259,10 +259,10 @@ Public Class MdiTabStrip
     Description("The background color of the close button when moused over.")> _
     Public Property CloseButtonBackColor() As Color
         Get
-            Return Me.m_closeButtonBackColor
+            Return m_closeButtonBackColor
         End Get
         Set(ByVal value As Color)
-            Me.m_closeButtonBackColor = value
+            m_closeButtonBackColor = value
         End Set
     End Property
 
@@ -275,11 +275,11 @@ Public Class MdiTabStrip
     Description("The foreground color of the close button, used to display the glyph.")> _
     Public Property CloseButtonForeColor() As Color
         Get
-            Return Me.m_closeButtonForeColor
+            Return m_closeButtonForeColor
         End Get
         Set(ByVal value As Color)
-            Me.m_closeButtonForeColor = value
-            Me.Invalidate()
+            m_closeButtonForeColor = value
+            Invalidate()
         End Set
     End Property
 
@@ -292,10 +292,10 @@ Public Class MdiTabStrip
     Description("The foreground color of the close button when moused over, used to display the glyph.")> _
     Public Property CloseButtonHotForeColor() As Color
         Get
-            Return Me.m_closeButtonHotForeColor
+            Return m_closeButtonHotForeColor
         End Get
         Set(ByVal value As Color)
-            Me.m_closeButtonHotForeColor = value
+            m_closeButtonHotForeColor = value
         End Set
     End Property
 
@@ -308,10 +308,10 @@ Public Class MdiTabStrip
     Description("The border color of the close button when moused over.")> _
     Public Property CloseButtonBorderColor() As Color
         Get
-            Return Me.m_closeButtonBorderColor
+            Return m_closeButtonBorderColor
         End Get
         Set(ByVal value As Color)
-            Me.m_closeButtonBorderColor = value
+            m_closeButtonBorderColor = value
         End Set
     End Property
 #End Region
@@ -326,11 +326,11 @@ Public Class MdiTabStrip
     Description("The background color of all inactive tabs.")> _
     Public Property InactiveTabColor() As Color
         Get
-            Return Me.m_inactiveTabColor
+            Return m_inactiveTabColor
         End Get
         Set(ByVal value As Color)
-            Me.m_inactiveTabColor = value
-            Me.m_backColorFadeArray = Me.GetFadeSteps(Me.InactiveTabColor, Me.MouseOverTabColor)
+            m_inactiveTabColor = value
+            m_backColorFadeArray = GetFadeSteps(InactiveTabColor, MouseOverTabColor)
             Invalidate()
         End Set
     End Property
@@ -344,12 +344,12 @@ Public Class MdiTabStrip
     Description("The foreground color of all inactive tabs, which is used to display text.")> _
     Public Property InactiveTabForeColor() As Color
         Get
-            Return Me.m_inactiveTabForeColor
+            Return m_inactiveTabForeColor
         End Get
         Set(ByVal value As Color)
-            Me.m_inactiveTabForeColor = value
-            Me.m_foreColorFadeArray = Me.GetFadeSteps(Me.InactiveTabForeColor, Me.MouseOverTabForeColor)
-            Me.Invalidate()
+            m_inactiveTabForeColor = value
+            m_foreColorFadeArray = GetFadeSteps(InactiveTabForeColor, MouseOverTabForeColor)
+            Invalidate()
         End Set
     End Property
 
@@ -362,10 +362,10 @@ Public Class MdiTabStrip
     Description("The border color of all inactive tabs.")> _
     Public Property InactiveTabBorderColor() As Color
         Get
-            Return Me.m_inactiveTabBorderColor
+            Return m_inactiveTabBorderColor
         End Get
         Set(ByVal value As Color)
-            Me.m_inactiveTabBorderColor = value
+            m_inactiveTabBorderColor = value
             Invalidate()
         End Set
     End Property
@@ -379,11 +379,11 @@ Public Class MdiTabStrip
     Description("The font used to display text in all inactive tabs.")> _
     Public Property InactiveTabFont() As Font
         Get
-            Return Me.m_inactiveTabFont
+            Return m_inactiveTabFont
         End Get
         Set(ByVal value As Font)
-            Me.m_inactiveTabFont = value
-            Me.Invalidate()
+            m_inactiveTabFont = value
+            Invalidate()
         End Set
     End Property
 #End Region
@@ -398,11 +398,11 @@ Public Class MdiTabStrip
     Description("The background color for the tab the mouse cursor is currently over.")> _
     Public Property MouseOverTabColor() As Color
         Get
-            Return Me.m_mouseOverTabColor
+            Return m_mouseOverTabColor
         End Get
         Set(ByVal value As Color)
-            Me.m_mouseOverTabColor = value
-            Me.m_backColorFadeArray = Me.GetFadeSteps(Me.InactiveTabColor, Me.MouseOverTabColor)
+            m_mouseOverTabColor = value
+            m_backColorFadeArray = GetFadeSteps(InactiveTabColor, MouseOverTabColor)
             Invalidate()
         End Set
     End Property
@@ -416,12 +416,12 @@ Public Class MdiTabStrip
     Description("The foreground color of the tab the mouse cursor is currently over, which is used to display text and glyphs.")> _
     Public Property MouseOverTabForeColor() As Color
         Get
-            Return Me.m_mouseOverTabForeColor
+            Return m_mouseOverTabForeColor
         End Get
         Set(ByVal value As Color)
-            Me.m_mouseOverTabForeColor = value
-            Me.m_foreColorFadeArray = Me.GetFadeSteps(Me.InactiveTabForeColor, Me.MouseOverTabForeColor)
-            Me.Invalidate()
+            m_mouseOverTabForeColor = value
+            m_foreColorFadeArray = GetFadeSteps(InactiveTabForeColor, MouseOverTabForeColor)
+            Invalidate()
         End Set
     End Property
 
@@ -434,11 +434,11 @@ Public Class MdiTabStrip
     Description("The font used to display text in the tab the mouse cursor is currently over.")> _
     Public Property MouseOverTabFont() As Font
         Get
-            Return Me.m_mouseOverTabFont
+            Return m_mouseOverTabFont
         End Get
         Set(ByVal value As Font)
-            Me.m_mouseOverTabFont = value
-            Me.Invalidate()
+            m_mouseOverTabFont = value
+            Invalidate()
         End Set
     End Property
 #End Region
@@ -447,21 +447,21 @@ Public Class MdiTabStrip
     <Browsable(False)> _
     Public ReadOnly Property LeftScrollTab() As MdiScrollTab
         Get
-            Return Me.m_leftScrollTab
+            Return m_leftScrollTab
         End Get
     End Property
 
     <Browsable(False)> _
     Public ReadOnly Property RightScrollTab() As MdiScrollTab
         Get
-            Return Me.m_rightScrollTab
+            Return m_rightScrollTab
         End Get
     End Property
 
     <Browsable(False)> _
     Public ReadOnly Property DropDownTab() As MdiScrollTab
         Get
-            Return Me.m_dropDownScrollTab
+            Return m_dropDownScrollTab
         End Get
     End Property
 #End Region
@@ -469,13 +469,13 @@ Public Class MdiTabStrip
     <Browsable(False)> _
     Public ReadOnly Property MdiNewTab() As MdiNewTab
         Get
-            Return Me.m_newTab
+            Return m_newTab
         End Get
     End Property
 
     Friend ReadOnly Property Duration() As Integer
         Get
-            Return Me.m_duration
+            Return m_duration
         End Get
     End Property
 
@@ -485,12 +485,12 @@ Public Class MdiTabStrip
     ''' <returns>A <see cref="Rectangle"/> that represents the display area of the control.</returns>
     Public Overrides ReadOnly Property DisplayRectangle() As System.Drawing.Rectangle
         Get
-            Dim rect As New Rectangle(0, 0, Me.Width, Me.Height)
+            Dim rect As New Rectangle(0, 0, Width, Height)
 
-            rect.X += Me.Padding.Left
-            rect.Y += Me.Padding.Top
-            rect.Width -= Me.Padding.Left + Me.Padding.Right
-            rect.Height -= Me.Padding.Top + Me.Padding.Bottom
+            rect.X += Padding.Left
+            rect.Y += Padding.Top
+            rect.Width -= Padding.Left + Padding.Right
+            rect.Height -= Padding.Top + Padding.Bottom
 
             Return rect
         End Get
@@ -514,10 +514,10 @@ Public Class MdiTabStrip
     Category("Behavior")> _
     Public Property Animate() As Boolean
         Get
-            Return Me.m_animate
+            Return m_animate
         End Get
         Set(ByVal value As Boolean)
-            Me.m_animate = value
+            m_animate = value
         End Set
     End Property
 
@@ -529,11 +529,11 @@ Public Class MdiTabStrip
     Category("Appearance")> _
     Public Property DisplayFormIcon() As Boolean
         Get
-            Return Me.m_displayFormIcon
+            Return m_displayFormIcon
         End Get
         Set(ByVal value As Boolean)
-            Me.m_displayFormIcon = value
-            Me.Invalidate()
+            m_displayFormIcon = value
+            Invalidate()
         End Set
     End Property
 
@@ -545,22 +545,22 @@ Public Class MdiTabStrip
     Browsable(False)> _
     Public Property DropDownRenderer() As ToolStripRenderer
         Get
-            Return Me.m_dropDownScrollTab.MdiMenu.Renderer
+            Return m_dropDownScrollTab.MdiMenu.Renderer
         End Get
         Set(ByVal value As ToolStripRenderer)
-            Me.m_dropDownScrollTab.MdiMenu.Renderer = value
+            m_dropDownScrollTab.MdiMenu.Renderer = value
         End Set
     End Property
 
     Friend ReadOnly Property IsFirstTabActive() As Boolean
         Get
-            Return Me.Tabs.IndexOf(Me.ActiveTab) = 0
+            Return Tabs.IndexOf(ActiveTab) = 0
         End Get
     End Property
 
     Friend ReadOnly Property IsLastTabActive() As Boolean
         Get
-            Return Me.Tabs.IndexOf(Me.ActiveTab) = Me.Tabs.Count - 1
+            Return Tabs.IndexOf(ActiveTab) = Tabs.Count - 1
         End Get
     End Property
 
@@ -574,10 +574,10 @@ Public Class MdiTabStrip
     Description("Gets or sets the desired window state of all child forms")> _
     Public Property MdiWindowState() As MdiChildWindowState
         Get
-            Return Me.m_mdiWindowState
+            Return m_mdiWindowState
         End Get
         Set(ByVal value As MdiChildWindowState)
-            Me.m_mdiWindowState = value
+            m_mdiWindowState = value
         End Set
     End Property
 
@@ -590,10 +590,10 @@ Public Class MdiTabStrip
     Description("Defines how the control will handle the closing of tabs. The first tab or the last remaining tab can be restricted from closing or a setting of 'None' will allow all tabs to be closed.")> _
     Public Property TabPermanence() As MdiTabPermanence
         Get
-            Return Me.m_tabPermanence
+            Return m_tabPermanence
         End Get
         Set(ByVal value As MdiTabPermanence)
-            Me.m_tabPermanence = value
+            m_tabPermanence = value
             Invalidate()
         End Set
     End Property
@@ -611,8 +611,8 @@ Public Class MdiTabStrip
         Set(ByVal value As Boolean)
             If m_mdiNewTabVisible <> value Then
                 m_mdiNewTabVisible = value
-                Me.PerformLayout()
-                Me.Invalidate()
+                PerformLayout()
+                Invalidate()
             End If
         End Set
     End Property
@@ -629,14 +629,14 @@ Public Class MdiTabStrip
     Public Property MdiNewTabWidth() As Integer
         Get
             'Return Me.m_mdiNewTabWidth
-            Return Me.MdiNewTab.Width
+            Return MdiNewTab.Width
         End Get
         Set(ByVal value As Integer)
             'If Me.m_mdiNewTabWidth <> value Then
             'Me.m_mdiNewTabWidth = value
-            Me.MdiNewTab.Width = value
-            Me.PerformLayout()
-            Me.Invalidate()
+            MdiNewTab.Width = value
+            PerformLayout()
+            Invalidate()
             'End If
         End Set
     End Property
@@ -651,10 +651,10 @@ Public Class MdiTabStrip
     Description("Gets or sets the image for the MdiNewTab.")> _
     Public Property MdiNewTabImage() As Image
         Get
-            Return Me.m_mdiNewTabImage
+            Return m_mdiNewTabImage
         End Get
         Set(ByVal value As Image)
-            Me.m_mdiNewTabImage = value
+            m_mdiNewTabImage = value
         End Set
     End Property
 
@@ -665,7 +665,7 @@ Public Class MdiTabStrip
     <Browsable(False)> _
     Public ReadOnly Property Tabs() As MDITabCollection
         Get
-            Return Me.m_tabs
+            Return m_tabs
         End Get
     End Property
 
@@ -676,11 +676,11 @@ Public Class MdiTabStrip
     <DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)> _
     Public Overrides ReadOnly Property LayoutEngine() As System.Windows.Forms.Layout.LayoutEngine
         Get
-            If Me.m_layout Is Nothing Then
-                Me.m_layout = New TabStripLayoutEngine
+            If m_layout Is Nothing Then
+                m_layout = New TabStripLayoutEngine
             End If
 
-            Return Me.m_layout
+            Return m_layout
         End Get
     End Property
 
@@ -694,10 +694,10 @@ Public Class MdiTabStrip
     Description("The maximum width for each tab.")> _
     Public Property MaxTabWidth() As Integer
         Get
-            Return Me.m_maxTabWidth
+            Return m_maxTabWidth
         End Get
         Set(ByVal value As Integer)
-            Me.m_maxTabWidth = value
+            m_maxTabWidth = value
         End Set
     End Property
 
@@ -711,10 +711,10 @@ Public Class MdiTabStrip
     Description("The minimum width for each tab.")> _
     Public Property MinTabWidth() As Integer
         Get
-            Return Me.m_minTabWidth
+            Return m_minTabWidth
         End Get
         Set(ByVal value As Integer)
-            Me.m_minTabWidth = value
+            m_minTabWidth = value
         End Set
     End Property
 
@@ -726,12 +726,12 @@ Public Class MdiTabStrip
     Browsable(False)> _
     Public Property ActiveTab() As MdiTab
         Get
-            Return Me.m_activeTab
+            Return m_activeTab
         End Get
         Set(ByVal value As MdiTab)
-            If Me.m_activeTab IsNot value Then
-                Me.m_activeTab = value
-                Me.OnCurrentMdiTabChanged(New EventArgs)
+            If m_activeTab IsNot value Then
+                m_activeTab = value
+                OnCurrentMdiTabChanged(New EventArgs)
             End If
         End Set
     End Property
@@ -740,32 +740,32 @@ Public Class MdiTabStrip
     Browsable(False)> _
     Friend Property IsDragging() As Boolean
         Get
-            Return Me.m_isDragging
+            Return m_isDragging
         End Get
         Set(ByVal value As Boolean)
-            Me.m_isDragging = value
+            m_isDragging = value
         End Set
     End Property
 
     Friend ReadOnly Property BackColorFadeSteps() As List(Of Color)
         Get
-            Return Me.m_backColorFadeArray
+            Return m_backColorFadeArray
         End Get
     End Property
 
     Friend ReadOnly Property ForeColorFadeSteps() As List(Of Color)
         Get
-            Return Me.m_foreColorFadeArray
+            Return m_foreColorFadeArray
         End Get
     End Property
 
     Private Property MouseOverControl() As MdiTabStripItemBase
         Get
-            Return Me.m_mouseOverControl
+            Return m_mouseOverControl
         End Get
         Set(ByVal value As MdiTabStripItemBase)
-            Me.m_mouseOverControl = value
-            Me.Invalidate()
+            m_mouseOverControl = value
+            Invalidate()
         End Set
     End Property
 
@@ -812,18 +812,18 @@ Public Class MdiTabStrip
 
         'If a tab has already been created for the form then activate it,
         'otherwise create a new one.
-        If Me.TabExists(f) Then
-            Me.ActivateTab(f)
+        If TabExists(f) Then
+            ActivateTab(f)
         Else
-            Me.CreateTab(f)
+            CreateTab(f)
         End If
 
         'If the first tab has been made active then disable the left scroll tab
         'If the last tab has been made active then disable the right scroll tab
-        Me.LeftScrollTab.Enabled = IIf(Me.RightToLeft = Windows.Forms.RightToLeft.Yes, Not Me.IsLastTabActive, Not Me.IsFirstTabActive)
-        Me.RightScrollTab.Enabled = IIf(Me.RightToLeft = Windows.Forms.RightToLeft.Yes, Not Me.IsFirstTabActive, Not Me.IsLastTabActive)
+        LeftScrollTab.Enabled = IIf(Me.RightToLeft = Windows.Forms.RightToLeft.Yes, Not IsLastTabActive, Not IsFirstTabActive)
+        RightScrollTab.Enabled = IIf(Me.RightToLeft = Windows.Forms.RightToLeft.Yes, Not IsFirstTabActive, Not IsLastTabActive)
 
-        Me.Invalidate()
+        Invalidate()
     End Sub
 
     Protected Sub OnFormTextChanged(ByVal sender As Object, ByVal e As EventArgs)
@@ -832,17 +832,17 @@ Public Class MdiTabStrip
         'Find the menu item that cooresponds to this form and update it's Text property.
         'Can't override the menuitem's Text property to return the Form.Text property because when
         'the form's text property is changed the drop down menu does not resize itself accordingly.
-        For Each mi As MdiMenuItem In Me.m_dropDownScrollTab.m_mdiMenu.Items
+        For Each mi As MdiMenuItem In m_dropDownScrollTab.m_mdiMenu.Items
             If mi.Form Is f Then
                 mi.Text = f.Text
             End If
         Next
 
-        Me.Invalidate()
+        Invalidate()
     End Sub
 
     Private Function TabExists(ByVal mdiForm As Form) As Boolean
-        For Each tab As MdiTab In Me.Tabs
+        For Each tab As MdiTab In Tabs
             If tab.Form Is mdiForm Then
                 Return True
             End If
@@ -852,14 +852,14 @@ Public Class MdiTabStrip
     End Function
 
     Private Sub ActivateTab(ByVal mdiForm As Form)
-        For Each t As MdiTab In Me.Tabs
+        For Each t As MdiTab In Tabs
             If t.Form Is mdiForm Then
-                Me.ActiveTab = t
+                ActiveTab = t
 
                 'Find the menu item of the drop down menu and set it's Checked property
-                For Each mi As MdiMenuItem In Me.m_dropDownScrollTab.m_mdiMenu.Items
+                For Each mi As MdiMenuItem In m_dropDownScrollTab.m_mdiMenu.Items
                     If mi.Form Is mdiForm Then
-                        Me.m_dropDownScrollTab.m_mdiMenu.SetItemChecked(mi)
+                        m_dropDownScrollTab.m_mdiMenu.SetItemChecked(mi)
                         Exit For
                     End If
                 Next
@@ -889,55 +889,55 @@ Public Class MdiTabStrip
         tab.Form = mdiForm
 
         'Register event handler with the MdiChild form's FormClosed event.
-        AddHandler mdiForm.FormClosed, AddressOf Me.OnFormClosed
-        AddHandler mdiForm.TextChanged, AddressOf Me.OnFormTextChanged
+        AddHandler mdiForm.FormClosed, AddressOf OnFormClosed
+        AddHandler mdiForm.TextChanged, AddressOf OnFormTextChanged
 
         'Add the new tab to the Tabs collection and set it as the active tab
-        Me.Tabs.Add(tab)
-        Me.OnMdiTabAdded(New MdiTabStripTabEventArgs(tab))
-        Me.ActiveTab = tab
+        Tabs.Add(tab)
+        OnMdiTabAdded(New MdiTabStripTabEventArgs(tab))
+        ActiveTab = tab
 
         'Create a cooresponding menu item in the drop down menu
-        Me.AddMdiItem(mdiForm, tab)
-        Me.UpdateTabVisibility(ScrollDirection.Right)
+        AddMdiItem(mdiForm, tab)
+        UpdateTabVisibility(ScrollDirection.Right)
     End Sub
 
     Private Sub RemoveTab(ByVal mdiForm As Form)
-        For Each tab As MdiTab In Me.Tabs
+        For Each tab As MdiTab In Tabs
             If tab.Form Is mdiForm Then
                 'This algorithm will get the index of the tab that is higher than the tab
                 'that is to be removed. This has the affect of making the tab occuring after
                 'the tab just closed the active tab.
-                Dim tabIndex As Integer = Me.Tabs.IndexOf(tab)
+                Dim tabIndex As Integer = Tabs.IndexOf(tab)
 
                 'Remove tab from the Tabs collection
-                Me.Tabs.Remove(tab)
-                Me.OnMdiTabRemoved(New MdiTabStripTabEventArgs(tab))
+                Tabs.Remove(tab)
+                OnMdiTabRemoved(New MdiTabStripTabEventArgs(tab))
 
                 'Remove the cooresponding menu item from the drop down menu.
-                For Each mi As MdiMenuItem In Me.m_dropDownScrollTab.m_mdiMenu.Items
+                For Each mi As MdiMenuItem In m_dropDownScrollTab.m_mdiMenu.Items
                     If mi.Form Is tab.Form Then
-                        Me.m_dropDownScrollTab.m_mdiMenu.Items.Remove(mi)
+                        m_dropDownScrollTab.m_mdiMenu.Items.Remove(mi)
                         Exit For
                     End If
                 Next
 
                 'If the tab removed was the last tab in the collection then
                 'set the index to the last tab.
-                If tabIndex > Me.Tabs.Count - 1 Then
-                    tabIndex = Me.Tabs.Count - 1
+                If tabIndex > Tabs.Count - 1 Then
+                    tabIndex = Tabs.Count - 1
                 End If
 
                 If tabIndex > -1 Then
                     'Call the Form's Activate method to allow the event handlers
                     'to perform their neccessary calculations.
-                    Me.Tabs(tabIndex).Form.Activate()
+                    Tabs(tabIndex).Form.Activate()
                 Else
-                    Me.ActiveTab = Nothing
+                    ActiveTab = Nothing
                 End If
 
-                Me.UpdateTabVisibility(ScrollDirection.Right)
-                Me.Invalidate()
+                UpdateTabVisibility(ScrollDirection.Right)
+                Invalidate()
                 Exit For
             End If
         Next
@@ -947,7 +947,7 @@ Public Class MdiTabStrip
         'Only remove the tab when the form was closed by the user. All other close reason look like they
         'will also be closing the Mdi parent and so will dispose the MdiTabStrip.
         If e.CloseReason = CloseReason.UserClosing Then
-            Me.RemoveTab(CType(sender, Form))
+            RemoveTab(CType(sender, Form))
         End If
     End Sub
 #End Region
@@ -956,7 +956,7 @@ Public Class MdiTabStrip
 
 #Region "ToolTip painting"
     Private Sub m_toolTip_Popup(ByVal sender As Object, ByVal e As System.Windows.Forms.PopupEventArgs) Handles m_toolTip.Popup
-        Dim s As Size = TextRenderer.MeasureText(Me.m_toolTip.GetToolTip(e.AssociatedControl), SystemFonts.SmallCaptionFont)
+        Dim s As Size = TextRenderer.MeasureText(m_toolTip.GetToolTip(e.AssociatedControl), SystemFonts.SmallCaptionFont)
 
         s.Width += 4
         s.Height += 6
@@ -980,31 +980,31 @@ Public Class MdiTabStrip
     Protected Overrides Sub OnPaint(ByVal e As System.Windows.Forms.PaintEventArgs)
         e.Graphics.SmoothingMode = SmoothingMode.AntiAlias
 
-        For Each tab As MdiTab In Me.Tabs
+        For Each tab As MdiTab In Tabs
             If tab.Visible Then
                 tab.DrawControl(e.Graphics)
             End If
         Next
 
-        If Me.RightScrollTab.Visible Then
-            Me.RightScrollTab.DrawControl(e.Graphics)
+        If RightScrollTab.Visible Then
+            RightScrollTab.DrawControl(e.Graphics)
         End If
 
-        If Me.LeftScrollTab.Visible Then
-            Me.LeftScrollTab.DrawControl(e.Graphics)
+        If LeftScrollTab.Visible Then
+            LeftScrollTab.DrawControl(e.Graphics)
         End If
 
-        If Me.DropDownTab.Visible Then
-            Me.DropDownTab.DrawControl(e.Graphics)
+        If DropDownTab.Visible Then
+            DropDownTab.DrawControl(e.Graphics)
         End If
 
-        If Me.MdiNewTabVisible Then
-            Me.m_newTab.DrawControl(e.Graphics)
+        If MdiNewTabVisible Then
+            m_newTab.DrawControl(e.Graphics)
         End If
 
         'Draw DragDrop glyphs
-        If Me.IsDragging Then
-            Dim mditab As MdiTab = Me.Tabs(Me.m_indexOfTabForDrop)
+        If IsDragging Then
+            Dim mditab As MdiTab = Tabs(m_indexOfTabForDrop)
             Dim topTriangle As Point()
             Dim bottomTriangle As Point()
 
@@ -1013,17 +1013,17 @@ Public Class MdiTabStrip
                 topTriangle = New Point() {New Point(mditab.Left - 3, 0), _
                                            New Point(mditab.Left + 3, 0), _
                                            New Point(mditab.Left, 5)}
-                bottomTriangle = New Point() {New Point(mditab.Left - 3, Me.Height - 1), _
-                                              New Point(mditab.Left + 3, Me.Height - 1), _
-                                              New Point(mditab.Left, Me.Height - 6)}
+                bottomTriangle = New Point() {New Point(mditab.Left - 3, Height - 1), _
+                                              New Point(mditab.Left + 3, Height - 1), _
+                                              New Point(mditab.Left, Height - 6)}
             Else
                 'Glyphs need to be located on the right side of the tab
                 topTriangle = New Point() {New Point(mditab.Right - 3, 0), _
                                            New Point(mditab.Right + 3, 0), _
                                            New Point(mditab.Right, 5)}
-                bottomTriangle = New Point() {New Point(mditab.Right - 3, Me.Height - 1), _
-                                              New Point(mditab.Right + 3, Me.Height - 1), _
-                                              New Point(mditab.Right, Me.Height - 6)}
+                bottomTriangle = New Point() {New Point(mditab.Right - 3, Height - 1), _
+                                              New Point(mditab.Right + 3, Height - 1), _
+                                              New Point(mditab.Right, Height - 6)}
             End If
 
             e.Graphics.FillPolygon(Brushes.Black, topTriangle)
@@ -1034,27 +1034,27 @@ Public Class MdiTabStrip
     Protected Overrides Sub OnPaintBackground(ByVal e As System.Windows.Forms.PaintEventArgs)
         MyBase.OnPaintBackground(e)
 
-        For Each tab As MdiTab In Me.Tabs
+        For Each tab As MdiTab In Tabs
             'Draw the active tab last to make sure nothing paints over it.
             If Not tab.IsActive AndAlso tab.Visible Then
                 tab.DrawControlBackground(e.Graphics)
             End If
         Next
 
-        If Me.RightScrollTab IsNot Nothing AndAlso Me.m_rightScrollTab.Visible Then
-            Me.RightScrollTab.DrawControlBackground(e.Graphics)
+        If RightScrollTab IsNot Nothing AndAlso m_rightScrollTab.Visible Then
+            RightScrollTab.DrawControlBackground(e.Graphics)
         End If
 
-        If Me.LeftScrollTab IsNot Nothing AndAlso Me.m_leftScrollTab.Visible Then
-            Me.LeftScrollTab.DrawControlBackground(e.Graphics)
+        If LeftScrollTab IsNot Nothing AndAlso m_leftScrollTab.Visible Then
+            LeftScrollTab.DrawControlBackground(e.Graphics)
         End If
 
-        If Me.DropDownTab IsNot Nothing AndAlso Me.m_dropDownScrollTab.Visible Then
-            Me.DropDownTab.DrawControlBackground(e.Graphics)
+        If DropDownTab IsNot Nothing AndAlso m_dropDownScrollTab.Visible Then
+            DropDownTab.DrawControlBackground(e.Graphics)
         End If
 
-        If Me.m_newTab IsNot Nothing AndAlso Me.MdiNewTabVisible Then
-            Me.m_newTab.DrawControlBackground(e.Graphics)
+        If m_newTab IsNot Nothing AndAlso MdiNewTabVisible Then
+            m_newTab.DrawControlBackground(e.Graphics)
         End If
 
         If ActiveTab IsNot Nothing Then
@@ -1075,7 +1075,7 @@ Public Class MdiTabStrip
     Private Function GetFadeSteps(ByVal color1 As Color, ByVal color2 As Color) As List(Of Color)
         Dim colorArray As New List(Of Color)
 
-        Using bmp As New Bitmap(Me.m_duration, 1)
+        Using bmp As New Bitmap(m_duration, 1)
             Dim rect As New Rectangle(0, 0, bmp.Width, bmp.Height)
 
             Using g As Graphics = Graphics.FromImage(bmp)
@@ -1102,12 +1102,12 @@ Public Class MdiTabStrip
     ''' <param name="e">Not used</param>
     ''' <remarks></remarks>
     Private Sub m_timer_Tick(ByVal sender As Object, ByVal e As System.EventArgs) Handles m_timer.Tick
-        Dim index As Integer = (Me.m_animatingTabs.Count - 1)
+        Dim index As Integer = (m_animatingTabs.Count - 1)
         Do While (index >= 0)
-            Dim tab As MdiTab = DirectCast(Me.m_animatingTabs.Item(index), MdiTab)
+            Dim tab As MdiTab = DirectCast(m_animatingTabs.Item(index), MdiTab)
             Dim frame As Integer = tab.CurrentFrame
             If tab.AnimationType = AnimationType.FadeIn Then
-                If frame = Me.m_duration - 1 Then
+                If frame = m_duration - 1 Then
                     tab.StopAnimation()
                     Exit Sub
                 End If
@@ -1126,19 +1126,19 @@ Public Class MdiTabStrip
     End Sub
 
     Friend Sub AddAnimatingTab(ByVal tab As MdiTab)
-        If Me.m_animatingTabs.IndexOf(tab) < 0 Then
+        If m_animatingTabs.IndexOf(tab) < 0 Then
             'Add the tab to the arraylist only if it is not already in here.
-            Me.m_animatingTabs.Add(tab)
-            If Me.m_animatingTabs.Count = 1 Then
-                Me.m_timer.Enabled = True
+            m_animatingTabs.Add(tab)
+            If m_animatingTabs.Count = 1 Then
+                m_timer.Enabled = True
             End If
         End If
     End Sub
 
     Friend Sub RemoveAnimatingTab(ByVal tab As MdiTab)
-        Me.m_animatingTabs.Remove(tab)
-        If Me.m_animatingTabs.Count = 0 Then
-            Me.m_timer.Enabled = False
+        m_animatingTabs.Remove(tab)
+        If m_animatingTabs.Count = 0 Then
+            m_timer.Enabled = False
         End If
     End Sub
 #End Region
@@ -1155,19 +1155,19 @@ Public Class MdiTabStrip
         'This test is done to handle a user attempting to drag a tab to a new location.
         'Without this test in place DragDrop would not be initiated when a user clicks and starts
         'to drag at a point close to a tabs edge.
-        If e.Button And Windows.Forms.MouseButtons.Left = Windows.Forms.MouseButtons.Left AndAlso Me.m_mouseOverControl IsNot Nothing Then
-            Me.m_mouseOverControl.InvokeMouseMove(e)
+        If e.Button And Windows.Forms.MouseButtons.Left = Windows.Forms.MouseButtons.Left AndAlso m_mouseOverControl IsNot Nothing Then
+            m_mouseOverControl.InvokeMouseMove(e)
             Return
         End If
 
-        For Each tab As MdiTab In Me.Tabs
+        For Each tab As MdiTab In Tabs
             If tab.Visible AndAlso tab.HitTest(e.X, e.Y) Then
-                If tab IsNot Me.m_mouseOverControl Then
-                    If Me.m_mouseOverControl IsNot Nothing Then
-                        Me.m_mouseOverControl.InvokeMouseLeave(New EventArgs)
+                If tab IsNot m_mouseOverControl Then
+                    If m_mouseOverControl IsNot Nothing Then
+                        m_mouseOverControl.InvokeMouseLeave(New EventArgs)
                     End If
 
-                    Me.MouseOverControl = tab
+                    MouseOverControl = tab
                     tab.InvokeMouseEnter(New EventArgs)
                 Else
                     tab.InvokeMouseMove(e)
@@ -1176,90 +1176,90 @@ Public Class MdiTabStrip
             End If
         Next
 
-        If Me.LeftScrollTab.Visible AndAlso Me.LeftScrollTab.HitTest(e.X, e.Y) Then
-            If Me.LeftScrollTab IsNot Me.m_mouseOverControl Then
-                If Me.m_mouseOverControl IsNot Nothing Then
-                    Me.m_mouseOverControl.InvokeMouseLeave(New EventArgs)
+        If LeftScrollTab.Visible AndAlso LeftScrollTab.HitTest(e.X, e.Y) Then
+            If LeftScrollTab IsNot m_mouseOverControl Then
+                If m_mouseOverControl IsNot Nothing Then
+                    m_mouseOverControl.InvokeMouseLeave(New EventArgs)
                 End If
 
-                Me.MouseOverControl = Me.LeftScrollTab
-                Me.LeftScrollTab.InvokeMouseEnter(New EventArgs)
+                MouseOverControl = LeftScrollTab
+                LeftScrollTab.InvokeMouseEnter(New EventArgs)
             Else
-                Me.LeftScrollTab.InvokeMouseMove(e)
+                LeftScrollTab.InvokeMouseMove(e)
             End If
             Return
-        ElseIf Me.DropDownTab.Visible AndAlso Me.DropDownTab.HitTest(e.X, e.Y) Then
-            If Me.DropDownTab IsNot Me.m_mouseOverControl Then
-                If Me.m_mouseOverControl IsNot Nothing Then
-                    Me.m_mouseOverControl.InvokeMouseLeave(New EventArgs)
+        ElseIf DropDownTab.Visible AndAlso DropDownTab.HitTest(e.X, e.Y) Then
+            If DropDownTab IsNot m_mouseOverControl Then
+                If m_mouseOverControl IsNot Nothing Then
+                    m_mouseOverControl.InvokeMouseLeave(New EventArgs)
                 End If
 
-                Me.MouseOverControl = Me.DropDownTab
-                Me.DropDownTab.InvokeMouseEnter(New EventArgs)
+                MouseOverControl = DropDownTab
+                DropDownTab.InvokeMouseEnter(New EventArgs)
 
-                If Me.ShowTabToolTip Then
-                    Me.UpdateToolTip("Tab List")
-                End If
-            Else
-                Me.DropDownTab.InvokeMouseMove(e)
-            End If
-            Return
-        ElseIf Me.RightScrollTab.Visible AndAlso Me.RightScrollTab.HitTest(e.X, e.Y) Then
-            If Me.RightScrollTab IsNot Me.m_mouseOverControl Then
-                If Me.m_mouseOverControl IsNot Nothing Then
-                    Me.m_mouseOverControl.InvokeMouseLeave(New EventArgs)
-                End If
-
-                Me.MouseOverControl = Me.RightScrollTab
-                Me.RightScrollTab.InvokeMouseEnter(New EventArgs)
-            Else
-                Me.RightScrollTab.InvokeMouseMove(e)
-            End If
-            Return
-        ElseIf Me.MdiNewTabVisible AndAlso Me.MdiNewTab.HitTest(e.X, e.Y) Then
-            If Me.MdiNewTab IsNot Me.m_mouseOverControl Then
-                If Me.m_mouseOverControl IsNot Nothing Then
-                    Me.m_mouseOverControl.InvokeMouseLeave(New EventArgs)
-                End If
-
-                Me.MouseOverControl = Me.MdiNewTab
-                Me.MdiNewTab.InvokeMouseEnter(New EventArgs)
-
-                If Me.ShowTabToolTip Then
-                    Me.UpdateToolTip(Me.NewTabToolTipText)
+                If ShowTabToolTip Then
+                    UpdateToolTip("Tab List")
                 End If
             Else
-                Me.MdiNewTab.InvokeMouseMove(e)
+                DropDownTab.InvokeMouseMove(e)
+            End If
+            Return
+        ElseIf RightScrollTab.Visible AndAlso RightScrollTab.HitTest(e.X, e.Y) Then
+            If RightScrollTab IsNot m_mouseOverControl Then
+                If m_mouseOverControl IsNot Nothing Then
+                    m_mouseOverControl.InvokeMouseLeave(New EventArgs)
+                End If
+
+                MouseOverControl = RightScrollTab
+                RightScrollTab.InvokeMouseEnter(New EventArgs)
+            Else
+                RightScrollTab.InvokeMouseMove(e)
+            End If
+            Return
+        ElseIf MdiNewTabVisible AndAlso MdiNewTab.HitTest(e.X, e.Y) Then
+            If MdiNewTab IsNot m_mouseOverControl Then
+                If m_mouseOverControl IsNot Nothing Then
+                    m_mouseOverControl.InvokeMouseLeave(New EventArgs)
+                End If
+
+                MouseOverControl = MdiNewTab
+                MdiNewTab.InvokeMouseEnter(New EventArgs)
+
+                If ShowTabToolTip Then
+                    UpdateToolTip(NewTabToolTipText)
+                End If
+            Else
+                MdiNewTab.InvokeMouseMove(e)
             End If
             Return
             End If
 
-        If Me.m_mouseOverControl IsNot Nothing Then
-            Me.m_mouseOverControl.InvokeMouseLeave(New EventArgs)
+        If m_mouseOverControl IsNot Nothing Then
+            m_mouseOverControl.InvokeMouseLeave(New EventArgs)
         End If
 
-        Me.m_mouseOverControl = Nothing
-        Me.m_toolTip.Hide(Me)
+        m_mouseOverControl = Nothing
+        m_toolTip.Hide(Me)
     End Sub
 
     Protected Overrides Sub OnMouseMove(ByVal e As System.Windows.Forms.MouseEventArgs)
         MyBase.OnMouseMove(e)
-        Me.CheckMousePosition(e)
+        CheckMousePosition(e)
     End Sub
 
     Protected Overrides Sub OnMouseDown(ByVal e As System.Windows.Forms.MouseEventArgs)
         MyBase.OnMouseDown(e)
 
-        If Me.m_mouseOverControl IsNot Nothing Then
-            Me.m_mouseOverControl.InvokeMouseDown(e)
+        If m_mouseOverControl IsNot Nothing Then
+            m_mouseOverControl.InvokeMouseDown(e)
         End If
     End Sub
 
     Protected Overrides Sub OnMouseUp(ByVal e As System.Windows.Forms.MouseEventArgs)
         MyBase.OnMouseUp(e)
 
-        If Me.MouseOverControl IsNot Nothing Then
-            Me.MouseOverControl.InvokeMouseUp(e)
+        If MouseOverControl IsNot Nothing Then
+            MouseOverControl.InvokeMouseUp(e)
         End If
     End Sub
 
@@ -1268,26 +1268,26 @@ Public Class MdiTabStrip
 
         'Call each tab's MouseLeave method so that it can properly animate a fade out and
         'reset it's current frame to zero.
-        For Each tab As MdiTab In Me.Tabs
+        For Each tab As MdiTab In Tabs
             tab.InvokeMouseLeave(e)
         Next
 
-        Me.LeftScrollTab.InvokeMouseLeave(e)
-        Me.DropDownTab.InvokeMouseLeave(e)
-        Me.RightScrollTab.InvokeMouseLeave(e)
-        Me.MdiNewTab.InvokeMouseLeave(e)
-        Me.MouseOverControl = Nothing
+        LeftScrollTab.InvokeMouseLeave(e)
+        DropDownTab.InvokeMouseLeave(e)
+        RightScrollTab.InvokeMouseLeave(e)
+        MdiNewTab.InvokeMouseLeave(e)
+        MouseOverControl = Nothing
 
         Invalidate()
     End Sub
 
     Friend Sub UpdateToolTip(ByVal tipText As String)
-        Me.m_toolTip.Hide(Me)
-        Me.m_toolTip.Active = False
-        Me.m_toolTip.Active = True
+        m_toolTip.Hide(Me)
+        m_toolTip.Active = False
+        m_toolTip.Active = True
         Dim location As Point = Cursor.Position
-        location.Y = (location.Y + (Me.Cursor.Size.Height - Cursor.Current.HotSpot.Y))
-        Me.m_toolTip.Show(tipText, Me, MyBase.PointToClient(location), Me.m_toolTip.AutoPopDelay)
+        location.Y = (location.Y + (Cursor.Size.Height - Cursor.Current.HotSpot.Y))
+        m_toolTip.Show(tipText, Me, MyBase.PointToClient(location), m_toolTip.AutoPopDelay)
     End Sub
 
 #End Region
@@ -1299,72 +1299,72 @@ Public Class MdiTabStrip
             Return
         End If
 
-        Me.IsDragging = True
+        IsDragging = True
         drgevent.Effect = DragDropEffects.Move
 
-        Dim pt As Point = Me.PointToClient(New Point(drgevent.X, drgevent.Y))
+        Dim pt As Point = PointToClient(New Point(drgevent.X, drgevent.Y))
         DragDropHitTest(pt.X, pt.Y)
-        Me.Invalidate()
+        Invalidate()
     End Sub
 
     Private Sub DragDropHitTest(ByVal mouseX As Integer, ByVal mouseY As Integer)
         Dim tab As MdiTab = Nothing
 
-        For Each tab In Me.Tabs
+        For Each tab In Tabs
             If tab.CanDrag AndAlso tab.Visible Then
                 'Only test mouse position if the tab is visible and can be dragged (which signifies
                 'whether or not the tab can be reordered)
                 If tab.HitTest(mouseX, mouseY) Then
-                    Dim activeIndex As Integer = Me.Tabs.IndexOf(Me.ActiveTab)
+                    Dim activeIndex As Integer = Tabs.IndexOf(ActiveTab)
                     If tab Is Nothing Then
                         'This should never happen but check just in case.
-                        Me.m_indexOfTabForDrop = activeIndex
-                    ElseIf tab Is Me.ActiveTab Then
+                        m_indexOfTabForDrop = activeIndex
+                    ElseIf tab Is ActiveTab Then
                         'When starting a drag operation this should be the first test hit. We set the index
                         'to the active tab and setup the direction so that the indicator is displayed one
                         'the correct side of the tab.
-                        Me.m_indexOfTabForDrop = activeIndex
+                        m_indexOfTabForDrop = activeIndex
 
                         If Me.RightToLeft = Windows.Forms.RightToLeft.Yes Then
-                            Me.m_dragDirection = ScrollDirection.Right
+                            m_dragDirection = ScrollDirection.Right
                         Else
-                            Me.m_dragDirection = ScrollDirection.Left
+                            m_dragDirection = ScrollDirection.Left
                         End If
                     Else
                         'The code below determines the index at which the tab being currently dragged
                         'should be dropped at based on the direction the tab is being dragged (determined
                         'by the active tab's current index) as well as splitting the tabs 80/20.
                         'It is easier to understand seeing it in action than it is to explain it.
-                        Dim currentIndex As Integer = Me.Tabs.IndexOf(tab)
+                        Dim currentIndex As Integer = Tabs.IndexOf(tab)
 
                         If Me.RightToLeft = Windows.Forms.RightToLeft.Yes Then
                             If currentIndex <= activeIndex Then
                                 Dim a As Integer = tab.Location.X + (tab.Width * 0.2)
 
-                                Me.m_dragDirection = ScrollDirection.Right
+                                m_dragDirection = ScrollDirection.Right
 
                                 If mouseX < a Then
-                                    If currentIndex + 1 < Me.Tabs.Count Then
-                                        Me.m_indexOfTabForDrop = currentIndex + 1
+                                    If currentIndex + 1 < Tabs.Count Then
+                                        m_indexOfTabForDrop = currentIndex + 1
                                     End If
                                 Else
-                                    Me.m_indexOfTabForDrop = currentIndex
+                                    m_indexOfTabForDrop = currentIndex
                                 End If
                             Else
                                 Dim b As Integer = tab.Location.X + (tab.Width * 0.8)
 
-                                Me.m_dragDirection = ScrollDirection.Left
+                                m_dragDirection = ScrollDirection.Left
 
                                 If mouseX < b Then
-                                    If currentIndex < Me.Tabs.Count Then
-                                        Me.m_indexOfTabForDrop = currentIndex
+                                    If currentIndex < Tabs.Count Then
+                                        m_indexOfTabForDrop = currentIndex
                                     End If
                                 Else
                                     If activeIndex + 1 <> currentIndex Then
-                                        Me.m_indexOfTabForDrop = currentIndex - 1
+                                        m_indexOfTabForDrop = currentIndex - 1
                                     Else
-                                        Me.m_indexOfTabForDrop = activeIndex
-                                        Me.m_dragDirection = ScrollDirection.Right
+                                        m_indexOfTabForDrop = activeIndex
+                                        m_dragDirection = ScrollDirection.Right
                                     End If
                                 End If
                             End If
@@ -1372,30 +1372,30 @@ Public Class MdiTabStrip
                             If currentIndex <= activeIndex Then
                                 Dim a As Integer = tab.Location.X + (tab.Width * 0.8)
 
-                                Me.m_dragDirection = ScrollDirection.Left
+                                m_dragDirection = ScrollDirection.Left
 
                                 If mouseX < a Then
-                                    Me.m_indexOfTabForDrop = currentIndex
+                                    m_indexOfTabForDrop = currentIndex
                                 Else
-                                    If currentIndex + 1 < Me.Tabs.Count Then
-                                        Me.m_indexOfTabForDrop = currentIndex + 1
+                                    If currentIndex + 1 < Tabs.Count Then
+                                        m_indexOfTabForDrop = currentIndex + 1
                                     End If
                                 End If
                             Else
                                 Dim b As Integer = tab.Location.X + (tab.Width * 0.2)
 
-                                Me.m_dragDirection = ScrollDirection.Right
+                                m_dragDirection = ScrollDirection.Right
 
                                 If mouseX < b Then
                                     If activeIndex + 1 <> currentIndex Then
-                                        Me.m_indexOfTabForDrop = currentIndex - 1
+                                        m_indexOfTabForDrop = currentIndex - 1
                                     Else
-                                        Me.m_indexOfTabForDrop = activeIndex
-                                        Me.m_dragDirection = ScrollDirection.Left
+                                        m_indexOfTabForDrop = activeIndex
+                                        m_dragDirection = ScrollDirection.Left
                                     End If
                                 Else
-                                    If currentIndex < Me.Tabs.Count Then
-                                        Me.m_indexOfTabForDrop = currentIndex
+                                    If currentIndex < Tabs.Count Then
+                                        m_indexOfTabForDrop = currentIndex
                                     End If
                                 End If
                             End If
@@ -1416,36 +1416,36 @@ Public Class MdiTabStrip
                 'When the tab is dropped it is removed from the collection and then inserted back in at the
                 'designated index. The cooresponding menu item for the drop down is also moved to the same position
                 'in the menu's item collection.
-                If Me.m_tabs.IndexOf(tab) <> Me.m_indexOfTabForDrop Then
-                    Me.Tabs.Remove(tab)
-                    Me.Tabs.Insert(Me.m_indexOfTabForDrop, tab)
-                    Me.OnMdiTabIndexChanged(New EventArgs)
-                    Me.PerformLayout()
+                If m_tabs.IndexOf(tab) <> m_indexOfTabForDrop Then
+                    Tabs.Remove(tab)
+                    Tabs.Insert(m_indexOfTabForDrop, tab)
+                    OnMdiTabIndexChanged(New EventArgs)
+                    PerformLayout()
 
                     Dim f As Form = tab.Form
-                    For Each mi As MdiMenuItem In Me.DropDownTab.m_mdiMenu.Items
+                    For Each mi As MdiMenuItem In DropDownTab.m_mdiMenu.Items
                         If mi.Form Is f Then
-                            Me.DropDownTab.m_mdiMenu.Items.Remove(mi)
-                            Me.DropDownTab.m_mdiMenu.Items.Insert(Me.m_indexOfTabForDrop, mi)
+                            DropDownTab.m_mdiMenu.Items.Remove(mi)
+                            DropDownTab.m_mdiMenu.Items.Insert(m_indexOfTabForDrop, mi)
                             Exit For
                         End If
                     Next
 
                     'After this operation need to determine if the left or right scroll tab should be enabled or not.
-                    Me.LeftScrollTab.Enabled = Not Me.IsFirstTabActive
-                    Me.RightScrollTab.Enabled = Not Me.IsLastTabActive
+                    LeftScrollTab.Enabled = Not IsFirstTabActive
+                    RightScrollTab.Enabled = Not IsLastTabActive
                 End If
             End If
         End If
 
-        Me.IsDragging = False
-        Me.Invalidate()
+        IsDragging = False
+        Invalidate()
     End Sub
 #End Region
 
 #Region "ContextMenu methods"
     Private Sub AddMdiItem(ByVal f As Form, ByVal tab As MdiTab)
-        Dim item As New MdiMenuItem(tab, New EventHandler(AddressOf Me.MenuItemClick))
+        Dim item As New MdiMenuItem(tab, New EventHandler(AddressOf MenuItemClick))
         Dim bmp As New Bitmap(f.Icon.Width, f.Icon.Height, Imaging.PixelFormat.Format32bppArgb)
 
         Using g As Graphics = Graphics.FromImage(bmp)
@@ -1455,13 +1455,13 @@ Public Class MdiTabStrip
 
         item.Image = bmp
         item.Text = f.Text
-        Me.m_dropDownScrollTab.m_mdiMenu.Items.Add(item)
+        m_dropDownScrollTab.m_mdiMenu.Items.Add(item)
     End Sub
 
     Private Sub RemoveMdiItem(ByVal f As Form)
-        For Each mi As MdiMenuItem In Me.m_dropDownScrollTab.m_mdiMenu.Items
+        For Each mi As MdiMenuItem In m_dropDownScrollTab.m_mdiMenu.Items
             If mi.Form Is f Then
-                Me.m_dropDownScrollTab.m_mdiMenu.Items.Remove(mi)
+                m_dropDownScrollTab.m_mdiMenu.Items.Remove(mi)
                 Exit For
             End If
         Next
@@ -1471,11 +1471,11 @@ Public Class MdiTabStrip
         Dim mItem As MdiMenuItem = TryCast(sender, MdiMenuItem)
         If mItem IsNot Nothing Then
             Dim direction As ScrollDirection
-            Dim activeIndex As Integer = Me.Tabs.IndexOf(Me.ActiveTab)
+            Dim activeIndex As Integer = Tabs.IndexOf(ActiveTab)
             Dim clickedTabIndex As Integer
 
             mItem.Form.Activate()
-            clickedTabIndex = Me.Tabs.IndexOf(Me.ActiveTab)
+            clickedTabIndex = Tabs.IndexOf(ActiveTab)
 
             If activeIndex > clickedTabIndex Then
                 direction = ScrollDirection.Left
@@ -1483,7 +1483,7 @@ Public Class MdiTabStrip
                 direction = ScrollDirection.Right
             End If
 
-            Me.UpdateTabVisibility(direction)
+            UpdateTabVisibility(direction)
         End If
     End Sub
 #End Region
@@ -1506,21 +1506,21 @@ Public Class MdiTabStrip
     Private Sub ScrollTabHandler(ByVal direction As ScrollDirection)
         Dim nextIndex As Integer = 0
         If direction = ScrollDirection.Left Then
-            nextIndex = Me.Tabs.FirstVisibleTabIndex
+            nextIndex = Tabs.FirstVisibleTabIndex
             nextIndex -= 1
         Else
-            nextIndex = Me.Tabs.LastVisibleTabIndex
+            nextIndex = Tabs.LastVisibleTabIndex
             nextIndex += 1
         End If
 
-        If nextIndex > Me.Tabs.Count - 1 Then
-            nextIndex = Me.Tabs.Count - 1
+        If nextIndex > Tabs.Count - 1 Then
+            nextIndex = Tabs.Count - 1
         ElseIf nextIndex < 0 Then
             nextIndex = 0
         End If
 
-        Me.Tabs(nextIndex).Form.Activate()
-        Me.UpdateTabVisibility(direction)
+        Tabs(nextIndex).Form.Activate()
+        UpdateTabVisibility(direction)
     End Sub
 
     Private Sub UpdateTabVisibility(ByVal direction As ScrollDirection)
@@ -1528,7 +1528,7 @@ Public Class MdiTabStrip
         Dim leftTabIndex As Integer
         Dim rightTabIndex As Integer
         Dim activeTabIndex As Integer
-        Dim tabAreaWidth As Integer = Me.AdjustAvailableWidth
+        Dim tabAreaWidth As Integer = AdjustAvailableWidth
 
         'tabAreaWidth = Me.DisplayRectangle.Width
 
@@ -1552,18 +1552,18 @@ Public Class MdiTabStrip
 
         'Based on the minimum width each tab can be determine the number of tabs
         'that can be shown in the calculated area.
-        tabsToShow = tabAreaWidth \ Me.MinTabWidth
-        activeTabIndex = Me.Tabs.IndexOf(Me.ActiveTab)
+        tabsToShow = tabAreaWidth \ MinTabWidth
+        activeTabIndex = Tabs.IndexOf(ActiveTab)
 
         If tabsToShow = 1 Then
             'If only one can be visible then set this tab's index as the right and left
             leftTabIndex = activeTabIndex
             rightTabIndex = activeTabIndex
-        ElseIf tabsToShow >= Me.Tabs.Count Then
+        ElseIf tabsToShow >= Tabs.Count Then
             'If all of the tabs can be visible then set the left index to 0 and 
             'the right to the last tab's index
             leftTabIndex = 0
-            rightTabIndex = Me.Tabs.Count - 1
+            rightTabIndex = Tabs.Count - 1
         ElseIf direction = ScrollDirection.Left Then
             'Tries to make the active tab the last tab visible. If this calculation puts the left
             'index past zero (negative) then it resets itself so that it shows the number of tabsToShow
@@ -1582,10 +1582,10 @@ Public Class MdiTabStrip
             'the number of tabsToShow ending at the last index in the collection.
             rightTabIndex = activeTabIndex + (tabsToShow - 1)
 
-            If rightTabIndex < Me.Tabs.Count Then
+            If rightTabIndex < Tabs.Count Then
                 leftTabIndex = activeTabIndex
             Else
-                rightTabIndex = Me.Tabs.Count - 1
+                rightTabIndex = Tabs.Count - 1
                 leftTabIndex = rightTabIndex - (tabsToShow - 1)
             End If
         Else
@@ -1599,11 +1599,11 @@ Public Class MdiTabStrip
             Dim l As Integer = tabsToShow \ 2
             Dim r As Integer
 
-            If tabsToShow = Me.Tabs.VisibleCount Then Exit Sub
+            If tabsToShow = Tabs.VisibleCount Then Exit Sub
 
-            If tabsToShow < Me.Tabs.VisibleCount Then
-                Me.SetScrollTabVisibility()
-                Me.AdjustAvailableWidth()
+            If tabsToShow < Tabs.VisibleCount Then
+                SetScrollTabVisibility()
+                AdjustAvailableWidth()
             End If
 
             If tabsToShow Mod 2 = 0 Then
@@ -1612,7 +1612,7 @@ Public Class MdiTabStrip
                 r = l
             End If
 
-            If activeTabIndex - Me.Tabs.FirstVisibleTabIndex <= Me.Tabs.LastVisibleTabIndex - activeTabIndex Then
+            If activeTabIndex - Tabs.FirstVisibleTabIndex <= Tabs.LastVisibleTabIndex - activeTabIndex Then
                 leftTabIndex = activeTabIndex - l
 
                 If leftTabIndex >= 0 Then
@@ -1622,17 +1622,17 @@ Public Class MdiTabStrip
                     leftTabIndex = 0
                 End If
 
-                If rightTabIndex >= Me.Tabs.Count Then
-                    rightTabIndex = Me.Tabs.Count - 1
+                If rightTabIndex >= Tabs.Count Then
+                    rightTabIndex = Tabs.Count - 1
                     leftTabIndex = rightTabIndex - (tabsToShow - 1)
                 End If
             Else
                 rightTabIndex = activeTabIndex + r
 
-                If rightTabIndex < Me.Tabs.Count Then
+                If rightTabIndex < Tabs.Count Then
                     leftTabIndex = activeTabIndex - l
                 Else
-                    rightTabIndex = Me.Tabs.Count - 1
+                    rightTabIndex = Tabs.Count - 1
                     leftTabIndex = rightTabIndex - (tabsToShow - 1)
                 End If
 
@@ -1645,8 +1645,8 @@ Public Class MdiTabStrip
 
         'Using the left and right indeces determined above iterate through the tab collection
         'and hide the tab if is not within the range of indeces and show it if it is.
-        For Each tab As MdiTab In Me.Tabs
-            Dim tabPos As Integer = Me.Tabs.IndexOf(tab)
+        For Each tab As MdiTab In Tabs
+            Dim tabPos As Integer = Tabs.IndexOf(tab)
 
             If tabPos <= rightTabIndex And tabPos >= leftTabIndex Then
                 tab.Visible = True
@@ -1657,48 +1657,48 @@ Public Class MdiTabStrip
 
         'The active tab needs to always be visible. This code ensures that even when the main form
         'is resized to a very small width that this tab remains visible and the control draws correctly.
-        If Me.ActiveTab IsNot Nothing Then
-            Me.ActiveTab.Visible = True
+        If ActiveTab IsNot Nothing Then
+            ActiveTab.Visible = True
         End If
 
         'Figure each scroll tab's visiblity and perform a layout to set each tab's size and location.
-        Me.SetScrollTabVisibility()
-        Me.PerformLayout()
+        SetScrollTabVisibility()
+        PerformLayout()
     End Sub
 
     Private Sub SetScrollTabVisibility()
         'If tabs are hidden then the left and right scroll tabs need to be displayed.
         'If there are more than one tab open then the drop down tab needs to be displayed.
         'DesignMode is checked so that these tabs will be visible in the design window.
-        If Not Me.DesignMode Then
-            Dim hiddenTabs As Boolean = Me.Tabs.VisibleCount < Me.Tabs.Count
-            Dim multipleTabs As Boolean = Me.Tabs.Count > 1
+        If Not DesignMode Then
+            Dim hiddenTabs As Boolean = Tabs.VisibleCount < Tabs.Count
+            Dim multipleTabs As Boolean = Tabs.Count > 1
 
-            Me.LeftScrollTab.Visible = hiddenTabs
-            Me.RightScrollTab.Visible = hiddenTabs
-            Me.DropDownTab.Visible = multipleTabs
+            LeftScrollTab.Visible = hiddenTabs
+            RightScrollTab.Visible = hiddenTabs
+            DropDownTab.Visible = multipleTabs
         End If
     End Sub
 
     Private Function AdjustAvailableWidth() As Integer
-        Dim w As Integer = Me.DisplayRectangle.Width
+        Dim w As Integer = DisplayRectangle.Width
 
         'Must subtract the area occupied by the visible scroll tabs to get the
         'true area the form tabs can occupy.
-        If Me.LeftScrollTab.Visible Then
-            w -= Me.LeftScrollTab.Width
+        If LeftScrollTab.Visible Then
+            w -= LeftScrollTab.Width
         End If
 
-        If Me.DropDownTab.Visible Then
-            w -= Me.DropDownTab.Width
+        If DropDownTab.Visible Then
+            w -= DropDownTab.Width
         End If
 
-        If Me.RightScrollTab.Visible Then
-            w -= Me.RightScrollTab.Width
+        If RightScrollTab.Visible Then
+            w -= RightScrollTab.Width
         End If
 
-        If Me.MdiNewTabVisible Then
-            w -= Me.m_newTab.Width
+        If MdiNewTabVisible Then
+            w -= m_newTab.Width
         End If
 
         Return w
@@ -1708,7 +1708,7 @@ Public Class MdiTabStrip
 #Region "Resize"
     Protected Overrides Sub OnResize(ByVal e As System.EventArgs)
         MyBase.OnResize(e)
-        Me.UpdateTabVisibility(ScrollDirection.None)
+        UpdateTabVisibility(ScrollDirection.None)
     End Sub
 #End Region
 
@@ -1734,7 +1734,7 @@ Public Class MdiTabStrip
     End Sub
 
     Protected Friend Sub OnMdiNewTabClick()
-        RaiseEvent MdiNewTabClicked(Me.m_newTab, New EventArgs)
+        RaiseEvent MdiNewTabClicked(m_newTab, New EventArgs)
     End Sub
 #End Region
 
@@ -1758,7 +1758,7 @@ Public Class MdiTabStrip
             'to display then don't try to layout the control.
             If tabAreaWidth < 1 Or visibleCount < 1 Then
                 'If the MdiNewTab is visible then we need to layout it's position.
-                Me.LayoutMdiNewTab(strip, nextLocation, stripRectangle.Height + strip.Margin.Bottom)
+                LayoutMdiNewTab(strip, nextLocation, stripRectangle.Height + strip.Margin.Bottom)
                 Return False
             End If
 
@@ -1770,32 +1770,32 @@ Public Class MdiTabStrip
                 nextLocation.X = stripRectangle.Right
 
                 If strip.RightScrollTab.Visible Then
-                    nextLocation = Me.MirrorScrollTab(strip.RightScrollTab, nextLocation, stripRectangle.Height)
+                    nextLocation = MirrorScrollTab(strip.RightScrollTab, nextLocation, stripRectangle.Height)
                     tabAreaWidth -= strip.RightScrollTab.Width
                 End If
 
                 If strip.DropDownTab.Visible Then
-                    nextLocation = Me.MirrorScrollTab(strip.DropDownTab, nextLocation, stripRectangle.Height)
+                    nextLocation = MirrorScrollTab(strip.DropDownTab, nextLocation, stripRectangle.Height)
                     tabAreaWidth -= strip.DropDownTab.Width
                 End If
 
                 If strip.LeftScrollTab.Visible Then
-                    nextLocation = Me.MirrorScrollTab(strip.LeftScrollTab, nextLocation, stripRectangle.Height)
+                    nextLocation = MirrorScrollTab(strip.LeftScrollTab, nextLocation, stripRectangle.Height)
                     tabAreaWidth -= strip.LeftScrollTab.Width
                 End If
             Else
                 If strip.LeftScrollTab.Visible Then
-                    nextLocation = Me.SetScrollTab(strip.LeftScrollTab, nextLocation, stripRectangle.Height)
+                    nextLocation = SetScrollTab(strip.LeftScrollTab, nextLocation, stripRectangle.Height)
                     tabAreaWidth -= strip.LeftScrollTab.Width
                 End If
 
                 If strip.DropDownTab.Visible Then
-                    nextLocation = Me.SetScrollTab(strip.DropDownTab, nextLocation, stripRectangle.Height)
+                    nextLocation = SetScrollTab(strip.DropDownTab, nextLocation, stripRectangle.Height)
                     tabAreaWidth -= strip.DropDownTab.Width
                 End If
 
                 If strip.RightScrollTab.Visible Then
-                    nextLocation = Me.SetScrollTab(strip.RightScrollTab, nextLocation, stripRectangle.Height)
+                    nextLocation = SetScrollTab(strip.RightScrollTab, nextLocation, stripRectangle.Height)
                     tabAreaWidth -= strip.RightScrollTab.Width
                 End If
             End If
@@ -1848,7 +1848,7 @@ Public Class MdiTabStrip
                 End If
             Next tab
 
-            Me.LayoutMdiNewTab(strip, nextLocation, stripRectangle.Height)
+            LayoutMdiNewTab(strip, nextLocation, stripRectangle.Height)
 
             'Return False because we don't want layout to be performed again by the parent of the container
             Return False
@@ -1857,9 +1857,9 @@ Public Class MdiTabStrip
         Private Sub LayoutMdiNewTab(ByVal strip As MdiTabStrip, ByVal position As Point, ByVal height As Integer)
             If strip.MdiNewTabVisible Then
                 If strip.RightToLeft = Windows.Forms.RightToLeft.Yes Then
-                    Me.MirrorNewTab(strip.MdiNewTab, position, height)
+                    MirrorNewTab(strip.MdiNewTab, position, height)
                 Else
-                    Me.SetNewTab(strip.MdiNewTab, position, height)
+                    SetNewTab(strip.MdiNewTab, position, height)
                 End If
             End If
         End Sub

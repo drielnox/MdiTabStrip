@@ -5,11 +5,11 @@ Friend Class MdiTabStripDropDown
     Friend Sub New()
         MyBase.New()
 
-        Me.Renderer = New MdiMenuStripRenderer
+        Renderer = New MdiMenuStripRenderer
     End Sub
 
     Friend Sub SetItemChecked(ByVal item As MdiMenuItem)
-        For Each mi As MdiMenuItem In Me.Items
+        For Each mi As MdiMenuItem In Items
             mi.Checked = False
         Next
 
@@ -19,7 +19,7 @@ Friend Class MdiTabStripDropDown
     Protected Overrides Sub OnItemAdded(ByVal e As System.Windows.Forms.ToolStripItemEventArgs)
         MyBase.OnItemAdded(e)
 
-        Me.SetItemChecked(e.Item)
+        SetItemChecked(e.Item)
     End Sub
 End Class
 
@@ -30,31 +30,31 @@ Friend Class MdiMenuItem
     Private m_ownerTab As MdiTab
 
     Public Sub New(ByVal tab As MdiTab, ByVal handler As EventHandler)
-        Me.m_ownerTab = tab
-        AddHandler Me.Click, handler
+        m_ownerTab = tab
+        AddHandler Click, handler
     End Sub
 
     Public ReadOnly Property Form() As Form
         Get
-            Return Me.m_ownerTab.Form
+            Return m_ownerTab.Form
         End Get
     End Property
 
     Public ReadOnly Property IsMouseOver() As Boolean
         Get
-            Return Me.m_isMouseOver
+            Return m_isMouseOver
         End Get
     End Property
 
     Public ReadOnly Property IsTabActive() As Boolean
         Get
-            Return Me.m_ownerTab.IsActive
+            Return m_ownerTab.IsActive
         End Get
     End Property
 
     Public ReadOnly Property IsTabVisible() As Boolean
         Get
-            Return Me.m_ownerTab.Visible
+            Return m_ownerTab.Visible
         End Get
     End Property
 
@@ -77,13 +77,13 @@ Friend Class MdiMenuItem
 
     Protected Overrides Sub OnMouseEnter(ByVal e As System.EventArgs)
         MyBase.OnMouseEnter(e)
-        Me.m_isMouseOver = True
-        Me.Invalidate()
+        m_isMouseOver = True
+        Invalidate()
     End Sub
 
     Protected Overrides Sub OnMouseLeave(ByVal e As System.EventArgs)
         MyBase.OnMouseLeave(e)
-        Me.m_isMouseOver = False
-        Me.Invalidate()
+        m_isMouseOver = False
+        Invalidate()
     End Sub
 End Class

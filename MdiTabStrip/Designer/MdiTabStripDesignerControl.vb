@@ -21,9 +21,9 @@ Namespace Design
         Friend Event TabSelected(ByVal e As TabSelectedEventArgs)
 
         Public Sub New()
-            Me.DoubleBuffered = True
-            Me.GetTabBounds()
-            Me.Dock = DockStyle.Top
+            DoubleBuffered = True
+            GetTabBounds()
+            Dock = DockStyle.Top
         End Sub
 
 #Region "Properties"
@@ -52,7 +52,7 @@ Namespace Design
             Set(ByVal value As Boolean)
                 If _isMouseOverCloseButton <> value Then
                     _isMouseOverCloseButton = value
-                    Me.Invalidate()
+                    Invalidate()
                 End If
             End Set
         End Property
@@ -68,18 +68,18 @@ Namespace Design
         Protected Overrides Sub OnPaint(ByVal e As System.Windows.Forms.PaintEventArgs)
             e.Graphics.SmoothingMode = SmoothingMode.AntiAlias
 
-            Me.DrawTab(e.Graphics)
+            DrawTab(e.Graphics)
         End Sub
 
         Protected Overridable Sub DrawTab(ByVal g As Graphics)
-            Me.DrawActiveTab(g)
-            Me.DrawInactiveTab(g)
-            Me.DrawMouseOverTab(g)
+            DrawActiveTab(g)
+            DrawInactiveTab(g)
+            DrawMouseOverTab(g)
         End Sub
 
         Private Sub DrawActiveTab(ByVal g As Graphics)
             Dim iconRectangle As Rectangle
-            Dim textRectangle As New Rectangle(30, 16, 98, Me.Height - 21)
+            Dim textRectangle As New Rectangle(30, 16, 98, Height - 21)
 
             If Me.RightToLeft = Windows.Forms.RightToLeft.Yes Then
                 iconRectangle = New Rectangle(180, 13, 17, 17)
@@ -88,14 +88,14 @@ Namespace Design
                 iconRectangle = New Rectangle(13, 13, 17, 17)
             End If
 
-            Me.DrawFormIcon(g, iconRectangle)
-            Me.DrawTabText(g, textRectangle, "Active Tab", Me.ActiveTabTemplate.ForeColor, Me.ActiveTabTemplate.Font)
-            Me.DrawCloseButton(g)
+            DrawFormIcon(g, iconRectangle)
+            DrawTabText(g, textRectangle, "Active Tab", ActiveTabTemplate.ForeColor, ActiveTabTemplate.Font)
+            DrawCloseButton(g)
         End Sub
 
         Private Sub DrawInactiveTab(ByVal g As Graphics)
             Dim iconRectangle As Rectangle
-            Dim textRectangle As New Rectangle(172, 18, 123, Me.Height - 23)
+            Dim textRectangle As New Rectangle(172, 18, 123, Height - 23)
 
             If Me.RightToLeft = Windows.Forms.RightToLeft.Yes Then
                 iconRectangle = New Rectangle(330, 15, 17, 17)
@@ -104,13 +104,13 @@ Namespace Design
                 iconRectangle = New Rectangle(155, 15, 17, 17)
             End If
 
-            Me.DrawFormIcon(g, iconRectangle)
-            Me.DrawTabText(g, textRectangle, "Inactive Tab", Me.InactiveTabTemplate.ForeColor, Me.InactiveTabTemplate.Font)
+            DrawFormIcon(g, iconRectangle)
+            DrawTabText(g, textRectangle, "Inactive Tab", InactiveTabTemplate.ForeColor, InactiveTabTemplate.Font)
         End Sub
 
         Private Sub DrawMouseOverTab(ByVal g As Graphics)
             Dim iconRectangle As Rectangle
-            Dim textRectangle As New Rectangle(322, 18, 123, Me.Height - 23)
+            Dim textRectangle As New Rectangle(322, 18, 123, Height - 23)
 
             If Me.RightToLeft = Windows.Forms.RightToLeft.Yes Then
                 iconRectangle = New Rectangle(480, 15, 17, 17)
@@ -118,8 +118,8 @@ Namespace Design
             Else
                 iconRectangle = New Rectangle(305, 15, 17, 17)
             End If
-            Me.DrawFormIcon(g, iconRectangle)
-            Me.DrawTabText(g, textRectangle, "MouseOver Tab", Me.MouseOverTabTemplate.ForeColor, Me.MouseOverTabTemplate.Font)
+            DrawFormIcon(g, iconRectangle)
+            DrawTabText(g, textRectangle, "MouseOver Tab", MouseOverTabTemplate.ForeColor, MouseOverTabTemplate.Font)
         End Sub
 
         Private Sub DrawFormIcon(ByVal g As Graphics, ByVal rect As Rectangle)
@@ -147,31 +147,31 @@ Namespace Design
         End Sub
 
         Private Sub DrawCloseButton(ByVal g As Graphics)
-            If Me.IsMouseOverCloseButton Then
-                Me.DrawActiveCloseButton(g)
+            If IsMouseOverCloseButton Then
+                DrawActiveCloseButton(g)
             Else
-                Me.DrawInactiveCloseButton(g)
+                DrawInactiveCloseButton(g)
             End If
         End Sub
 
         Private Sub DrawActiveCloseButton(ByVal g As Graphics)
             Using gp As New GraphicsPath
-                gp.AddLines(Me.m_closeButtonBounds)
+                gp.AddLines(m_closeButtonBounds)
 
-                Using backBrush As New SolidBrush(Me.ActiveTabTemplate.CloseButtonBackColor)
+                Using backBrush As New SolidBrush(ActiveTabTemplate.CloseButtonBackColor)
                     g.FillPath(backBrush, gp)
                 End Using
 
-                Using borderPen As New Pen(Me.ActiveTabTemplate.CloseButtonBorderColor)
+                Using borderPen As New Pen(ActiveTabTemplate.CloseButtonBorderColor)
                     g.DrawPath(borderPen, gp)
                 End Using
             End Using
 
-            Me.DrawCloseButtonGlyph(g, Me.ActiveTabTemplate.CloseButtonHotForeColor)
+            DrawCloseButtonGlyph(g, ActiveTabTemplate.CloseButtonHotForeColor)
         End Sub
 
         Private Sub DrawInactiveCloseButton(ByVal g As Graphics)
-            Me.DrawCloseButtonGlyph(g, Me.ActiveTabTemplate.CloseButtonForeColor)
+            DrawCloseButtonGlyph(g, ActiveTabTemplate.CloseButtonForeColor)
         End Sub
 
         Private Sub DrawCloseButtonGlyph(ByVal g As Graphics, ByVal glyphColor As Color)
@@ -181,7 +181,7 @@ Namespace Design
                 Dim translateMatrix As New Matrix
                 Dim shadowColor As Color = Color.FromArgb(120, 130, 130, 130)
 
-                shadow.AddLines(Me.m_closeButtonGlyphBounds)
+                shadow.AddLines(m_closeButtonGlyphBounds)
                 translateMatrix.Translate(1, 1)
                 shadow.Transform(translateMatrix)
 
@@ -194,7 +194,7 @@ Namespace Design
             End Using
 
             Using gp As New GraphicsPath
-                gp.AddLines(Me.m_closeButtonGlyphBounds)
+                gp.AddLines(m_closeButtonGlyphBounds)
 
                 Using glyphBrush As New SolidBrush(glyphColor)
                     g.FillPath(glyphBrush, gp)
@@ -217,14 +217,14 @@ Namespace Design
         End Sub
 
         Private Sub DrawTabBackground(ByVal g As Graphics)
-            Me.DrawInactiveTabBackground(g)
-            Me.DrawMouseOverTabBackground(g)
-            Me.DrawActiveTabBackground(g)
+            DrawInactiveTabBackground(g)
+            DrawMouseOverTabBackground(g)
+            DrawActiveTabBackground(g)
         End Sub
 
         Private Sub DrawActiveTabBackground(ByVal g As Graphics)
-            Dim rect As Rectangle = Me.DisplayRectangle
-            Dim shadowRectangle As New Rectangle(0, Me.Height - 5, Me.Width, 5)
+            Dim rect As Rectangle = DisplayRectangle
+            Dim shadowRectangle As New Rectangle(0, Height - 5, Width, 5)
             Dim shadowBlend As New Blend
 
             rect.Offset(0, 8)
@@ -234,9 +234,9 @@ Namespace Design
             shadowBlend.Positions = New Single() {0.0F, 0.5F, 0.8F, 1.0F}
 
             Using outerPath As New GraphicsPath
-                outerPath.AddLines(Me.m_activeBounds)
+                outerPath.AddLines(m_activeBounds)
 
-                Using gradientbrush As New LinearGradientBrush(rect, Drawing.Color.White, Me.ActiveTabTemplate.BackColor, LinearGradientMode.Vertical)
+                Using gradientbrush As New LinearGradientBrush(rect, Drawing.Color.White, ActiveTabTemplate.BackColor, LinearGradientMode.Vertical)
                     Dim bl As New Blend
                     bl.Factors = New Single() {0.3F, 0.4F, 0.5F, 1.0F, 1.0F}
                     bl.Positions = New Single() {0.0F, 0.2F, 0.35F, 0.35F, 1.0F}
@@ -245,17 +245,17 @@ Namespace Design
                     g.FillPath(gradientbrush, outerPath)
                 End Using
 
-                Using shadowBrush As New LinearGradientBrush(shadowRectangle, Me.ActiveTabTemplate.BackColor, Color.Black, LinearGradientMode.Vertical)
+                Using shadowBrush As New LinearGradientBrush(shadowRectangle, ActiveTabTemplate.BackColor, Color.Black, LinearGradientMode.Vertical)
                     shadowBrush.Blend = shadowBlend
                     g.FillRectangle(shadowBrush, shadowRectangle)
                 End Using
 
                 g.SmoothingMode = SmoothingMode.AntiAlias
-                g.DrawPath(New Pen(Me.ActiveTabTemplate.BorderColor), outerPath)
+                g.DrawPath(New Pen(ActiveTabTemplate.BorderColor), outerPath)
             End Using
 
             Using innerPath As New GraphicsPath
-                innerPath.AddLines(Me.m_activeInnerBounds)
+                innerPath.AddLines(m_activeInnerBounds)
 
                 Dim lineColor As Color = Color.FromArgb(120, 255, 255, 255)
                 g.DrawPath(New Pen(lineColor), innerPath)
@@ -263,16 +263,16 @@ Namespace Design
         End Sub
 
         Private Sub DrawInactiveTabBackground(ByVal g As Graphics)
-            Dim rect As Rectangle = Me.DisplayRectangle
+            Dim rect As Rectangle = DisplayRectangle
 
             rect.Offset(0, 8)
             rect.Height -= 8
             g.SmoothingMode = SmoothingMode.None
 
             Using outerPath As New GraphicsPath
-                outerPath.AddLines(Me.m_inactiveBounds)
+                outerPath.AddLines(m_inactiveBounds)
 
-                Using gradientbrush As New LinearGradientBrush(rect, Drawing.Color.White, Me.InactiveTabTemplate.BackColor, LinearGradientMode.Vertical)
+                Using gradientbrush As New LinearGradientBrush(rect, Drawing.Color.White, InactiveTabTemplate.BackColor, LinearGradientMode.Vertical)
                     Dim bl As New Blend
                     bl.Factors = New Single() {0.3F, 0.4F, 0.5F, 1.0F, 0.8F, 0.7F}
                     bl.Positions = New Single() {0.0F, 0.2F, 0.4F, 0.4F, 0.8F, 1.0F}
@@ -282,11 +282,11 @@ Namespace Design
                 End Using
 
                 g.SmoothingMode = SmoothingMode.AntiAlias
-                g.DrawPath(New Pen(Me.InactiveTabTemplate.BorderColor), outerPath)
+                g.DrawPath(New Pen(InactiveTabTemplate.BorderColor), outerPath)
             End Using
 
             Using innerPath As New GraphicsPath
-                innerPath.AddLines(Me.m_inactiveInnerBounds)
+                innerPath.AddLines(m_inactiveInnerBounds)
 
                 Dim lineColor As Color = Color.FromArgb(120, 255, 255, 255)
                 g.DrawPath(New Pen(lineColor), innerPath)
@@ -294,16 +294,16 @@ Namespace Design
         End Sub
 
         Private Sub DrawMouseOverTabBackground(ByVal g As Graphics)
-            Dim rect As Rectangle = Me.DisplayRectangle
+            Dim rect As Rectangle = DisplayRectangle
 
             rect.Offset(0, 8)
             rect.Height -= 8
             g.SmoothingMode = SmoothingMode.None
 
             Using outerPath As New GraphicsPath
-                outerPath.AddLines(Me.m_mouseOverBounds)
+                outerPath.AddLines(m_mouseOverBounds)
 
-                Using gradientbrush As New LinearGradientBrush(rect, Drawing.Color.White, Me.MouseOverTabTemplate.BackColor, LinearGradientMode.Vertical)
+                Using gradientbrush As New LinearGradientBrush(rect, Drawing.Color.White, MouseOverTabTemplate.BackColor, LinearGradientMode.Vertical)
                     Dim bl As New Blend
                     bl.Factors = New Single() {0.3F, 0.4F, 0.5F, 1.0F, 0.8F, 0.7F}
                     bl.Positions = New Single() {0.0F, 0.2F, 0.4F, 0.4F, 0.8F, 1.0F}
@@ -313,11 +313,11 @@ Namespace Design
                 End Using
 
                 g.SmoothingMode = SmoothingMode.AntiAlias
-                g.DrawPath(New Pen(Me.InactiveTabTemplate.BorderColor), outerPath)
+                g.DrawPath(New Pen(InactiveTabTemplate.BorderColor), outerPath)
             End Using
 
             Using innerPath As New GraphicsPath
-                innerPath.AddLines(Me.m_mouseOverInnerBounds)
+                innerPath.AddLines(m_mouseOverInnerBounds)
 
                 Dim lineColor As Color = Color.FromArgb(120, 255, 255, 255)
                 g.DrawPath(New Pen(lineColor), innerPath)
@@ -404,9 +404,9 @@ Namespace Design
             MyBase.OnMouseMove(e)
 
             If closeButtonHitTest(e.X, e.Y) Then
-                Me.IsMouseOverCloseButton = True
+                IsMouseOverCloseButton = True
             Else
-                Me.IsMouseOverCloseButton = False
+                IsMouseOverCloseButton = False
             End If
         End Sub
 
@@ -432,62 +432,62 @@ Namespace Design
 #Region "Resizing"
         Protected Overrides Sub OnResize(ByVal e As System.EventArgs)
             MyBase.OnResize(e)
-            Me.GetTabBounds()
-            Me.Invalidate()
+            GetTabBounds()
+            Invalidate()
         End Sub
 
         Private Sub GetTabBounds()
             Dim startPoint As Point
             If Me.RightToLeft = Windows.Forms.RightToLeft.Yes Then
-                Me.m_activeBounds = New Point() {New Point(-2, Me.Height), _
-                            New Point(-2, Me.Height - 5), _
-                            New Point(55, Me.Height - 5), _
-                            New Point(58, Me.Height - 6), _
+                m_activeBounds = New Point() {New Point(-2, Height), _
+                            New Point(-2, Height - 5), _
+                            New Point(55, Height - 5), _
+                            New Point(58, Height - 6), _
                             New Point(58, 11), _
                             New Point(60, 8), _
                             New Point(198, 8), _
                             New Point(200, 11), _
-                            New Point(200, Me.Height - 6), _
-                            New Point(202, Me.Height - 5), _
-                            New Point(Me.Width, Me.Height - 5), _
-                            New Point(Me.Width, Me.Height)}
-                Me.m_activeInnerBounds = New Point() {New Point(-1, Me.Height), _
-                            New Point(-1, Me.Height - 4), _
-                            New Point(56, Me.Height - 4), _
-                            New Point(59, Me.Height - 6), _
+                            New Point(200, Height - 6), _
+                            New Point(202, Height - 5), _
+                            New Point(Width, Height - 5), _
+                            New Point(Width, Height)}
+                m_activeInnerBounds = New Point() {New Point(-1, Height), _
+                            New Point(-1, Height - 4), _
+                            New Point(56, Height - 4), _
+                            New Point(59, Height - 6), _
                             New Point(59, 12), _
                             New Point(61, 9), _
                             New Point(197, 9), _
                             New Point(199, 12), _
-                            New Point(199, Me.Height - 6), _
-                            New Point(201, Me.Height - 4), _
-                            New Point(Me.Width - 1, Me.Height - 4), _
-                            New Point(Me.Width - 1, Me.Height)}
-                Me.m_inactiveBounds = New Point() {New Point(200, Me.Height - 5), _
+                            New Point(199, Height - 6), _
+                            New Point(201, Height - 4), _
+                            New Point(Width - 1, Height - 4), _
+                            New Point(Width - 1, Height)}
+                m_inactiveBounds = New Point() {New Point(200, Height - 5), _
                             New Point(200, 13), _
                             New Point(202, 10), _
                             New Point(348, 10), _
                             New Point(350, 13), _
-                            New Point(350, Me.Height - 5)}
-                Me.m_inactiveInnerBounds = New Point() {New Point(201, Me.Height - 5), _
+                            New Point(350, Height - 5)}
+                m_inactiveInnerBounds = New Point() {New Point(201, Height - 5), _
                             New Point(201, 14), _
                             New Point(203, 11), _
                             New Point(347, 11), _
                             New Point(349, 14), _
-                            New Point(349, Me.Height - 5)}
-                Me.m_mouseOverBounds = New Point() {New Point(350, Me.Height - 5), _
+                            New Point(349, Height - 5)}
+                m_mouseOverBounds = New Point() {New Point(350, Height - 5), _
                             New Point(350, 13), _
                             New Point(352, 10), _
                             New Point(498, 10), _
                             New Point(500, 13), _
-                            New Point(500, Me.Height - 5)}
-                Me.m_mouseOverInnerBounds = New Point() {New Point(351, Me.Height - 5), _
+                            New Point(500, Height - 5)}
+                m_mouseOverInnerBounds = New Point() {New Point(351, Height - 5), _
                             New Point(351, 14), _
                             New Point(353, 11), _
                             New Point(497, 11), _
                             New Point(499, 14), _
-                            New Point(499, Me.Height - 5)}
-                Me.m_closeButtonBounds = New Point() {New Point(75, 15), _
+                            New Point(499, Height - 5)}
+                m_closeButtonBounds = New Point() {New Point(75, 15), _
                             New Point(63, 15), _
                             New Point(61, 17), _
                             New Point(61, 28), _
@@ -498,55 +498,55 @@ Namespace Design
                             New Point(75, 15)}
                 startPoint = New Point(65, 19)
             Else
-                Me.m_activeBounds = New Point() {New Point(-2, Me.Height), _
-                            New Point(-2, Me.Height - 5), _
-                            New Point(5, Me.Height - 5), _
-                            New Point(8, Me.Height - 6), _
+                m_activeBounds = New Point() {New Point(-2, Height), _
+                            New Point(-2, Height - 5), _
+                            New Point(5, Height - 5), _
+                            New Point(8, Height - 6), _
                             New Point(8, 11), _
                             New Point(10, 8), _
                             New Point(148, 8), _
                             New Point(150, 11), _
-                            New Point(150, Me.Height - 6), _
-                            New Point(152, Me.Height - 5), _
-                            New Point(Me.Width, Me.Height - 5), _
-                            New Point(Me.Width, Me.Height)}
-                Me.m_activeInnerBounds = New Point() {New Point(-1, Me.Height), _
-                            New Point(-1, Me.Height - 4), _
-                            New Point(6, Me.Height - 4), _
-                            New Point(9, Me.Height - 6), _
+                            New Point(150, Height - 6), _
+                            New Point(152, Height - 5), _
+                            New Point(Width, Height - 5), _
+                            New Point(Width, Height)}
+                m_activeInnerBounds = New Point() {New Point(-1, Height), _
+                            New Point(-1, Height - 4), _
+                            New Point(6, Height - 4), _
+                            New Point(9, Height - 6), _
                             New Point(9, 12), _
                             New Point(11, 9), _
                             New Point(147, 9), _
                             New Point(149, 12), _
-                            New Point(149, Me.Height - 6), _
-                            New Point(151, Me.Height - 4), _
-                            New Point(Me.Width - 1, Me.Height - 4), _
-                            New Point(Me.Width - 1, Me.Height)}
-                Me.m_inactiveBounds = New Point() {New Point(150, Me.Height - 5), _
+                            New Point(149, Height - 6), _
+                            New Point(151, Height - 4), _
+                            New Point(Width - 1, Height - 4), _
+                            New Point(Width - 1, Height)}
+                m_inactiveBounds = New Point() {New Point(150, Height - 5), _
                             New Point(150, 13), _
                             New Point(152, 10), _
                             New Point(298, 10), _
                             New Point(300, 13), _
-                            New Point(300, Me.Height - 5)}
-                Me.m_inactiveInnerBounds = New Point() {New Point(151, Me.Height - 5), _
+                            New Point(300, Height - 5)}
+                m_inactiveInnerBounds = New Point() {New Point(151, Height - 5), _
                             New Point(151, 14), _
                             New Point(153, 11), _
                             New Point(297, 11), _
                             New Point(299, 14), _
-                            New Point(299, Me.Height - 5)}
-                Me.m_mouseOverBounds = New Point() {New Point(300, Me.Height - 5), _
+                            New Point(299, Height - 5)}
+                m_mouseOverBounds = New Point() {New Point(300, Height - 5), _
                             New Point(300, 13), _
                             New Point(302, 10), _
                             New Point(448, 10), _
                             New Point(450, 13), _
-                            New Point(450, Me.Height - 5)}
-                Me.m_mouseOverInnerBounds = New Point() {New Point(301, Me.Height - 5), _
+                            New Point(450, Height - 5)}
+                m_mouseOverInnerBounds = New Point() {New Point(301, Height - 5), _
                             New Point(301, 14), _
                             New Point(303, 11), _
                             New Point(447, 11), _
                             New Point(449, 14), _
-                            New Point(449, Me.Height - 5)}
-                Me.m_closeButtonBounds = New Point() {New Point(132, 15), _
+                            New Point(449, Height - 5)}
+                m_closeButtonBounds = New Point() {New Point(132, 15), _
                             New Point(144, 15), _
                             New Point(146, 17), _
                             New Point(146, 28), _
@@ -558,7 +558,7 @@ Namespace Design
                 startPoint = New Point(134, 19)
             End If
 
-            Me.m_closeButtonGlyphBounds = New Point() {New Point(startPoint.X, startPoint.Y), _
+            m_closeButtonGlyphBounds = New Point() {New Point(startPoint.X, startPoint.Y), _
                         New Point(startPoint.X + 2, startPoint.Y), _
                         New Point(startPoint.X + 4, startPoint.Y + 2), _
                         New Point(startPoint.X + 6, startPoint.Y), _
@@ -578,15 +578,15 @@ Namespace Design
 
 #Region "Property Changed Handlers"
         Private Sub _activeTemplate_PropertyChanged() Handles _activeTemplate.PropertyChanged
-            Me.Invalidate()
+            Invalidate()
         End Sub
 
         Private Sub _inactiveTemplate_PropertyChanged() Handles _inactiveTemplate.PropertyChanged
-            Me.Invalidate()
+            Invalidate()
         End Sub
 
         Private Sub _mouseOverTemplate_PropertyChanged() Handles _mouseOverTemplate.PropertyChanged
-            Me.Invalidate()
+            Invalidate()
         End Sub
 #End Region
 

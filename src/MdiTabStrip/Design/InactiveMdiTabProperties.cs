@@ -1,8 +1,8 @@
-﻿using System.ComponentModel;
-using System.Drawing;
-
-namespace MdiTabStrip.Design
+﻿namespace MdiTabStrip.Design
 {
+    using System.ComponentModel;
+    using System.Drawing;
+
     public class InactiveMdiTabProperties : MdiTabProperties
     {
         private Color _borderColor;
@@ -12,6 +12,7 @@ namespace MdiTabStrip.Design
         public Color BorderColor
         {
             get { return _borderColor; }
+
             set
             {
                 if (_borderColor != value)

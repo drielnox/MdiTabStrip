@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.Design;
-using System.Linq;
-using System.Text;
+﻿using System.ComponentModel.Design;
 using System.Windows.Forms.Design;
 
 namespace MdiTabStrip.Design
@@ -15,7 +11,7 @@ namespace MdiTabStrip.Design
         {
             get
             {
-                if (_actionLists==null)
+                if (_actionLists == null)
                 {
                     _actionLists = new DesignerActionListCollection();
                 }
@@ -37,18 +33,18 @@ namespace MdiTabStrip.Design
             tabStrip.RightScrollTab.Visible = true;
             tabStrip.DropDownTab.Visible = true;
 
-            activeTab.Form = new Form1;
+            activeTab.Form = new Form1();
             tabStrip.ActiveTab = activeTab;
             tabStrip.Tabs.Add(activeTab);
 
-            inactiveTab.Form = new Form2;
+            inactiveTab.Form = new Form2();
             tabStrip.Tabs.Add(inactiveTab);
 
-            mouseOverTab.Form = new Form3;
+            mouseOverTab.Form = new Form3();
             mouseOverTab.IsMouseOver = true;
             tabStrip.Tabs.Add(mouseOverTab);
 
-            tabStrip.PerformLayout()
+            tabStrip.PerformLayout();
         }
     }
 }

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace MdiTabStrip
 {
-    internal class MdiTabStripTabClickedEventArgs
+    public class MdiTabStripTabClickedEventArgs : EventArgs
     {
         private MdiTab mdiTab;
 

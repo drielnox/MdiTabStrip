@@ -1,8 +1,8 @@
-﻿using System.ComponentModel;
-using System.Drawing;
-
-namespace MdiTabStrip.Design
+﻿namespace MdiTabStrip.Design
 {
+    using System.ComponentModel;
+    using System.Drawing;
+
     public class ActiveMdiTabProperties : InactiveMdiTabProperties
     {
         private Color _closeButtonBackColor;
@@ -55,7 +55,7 @@ namespace MdiTabStrip.Design
                 _closeButtonForeColor = value;
             }
         }
-        
+
         [Category("Close Button Appearance")]
         [Description("The glyph color of the tab's close button when moused over.")]
         public Color CloseButtonHotForeColor

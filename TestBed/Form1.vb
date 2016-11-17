@@ -43,17 +43,17 @@ Public Class Form1
     End Sub
 
     Private Sub ExitToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ExitToolStripMenuItem.Click
-        Me.Close()
+        Close()
     End Sub
 
     Private Sub AnimateToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles AnimateToolStripMenuItem.Click
-        Me.AnimateToolStripMenuItem.Checked = Not Me.AnimateToolStripMenuItem.Checked
-        Me.MdiTabStrip1.Animate = Me.AnimateToolStripMenuItem.Checked
+        AnimateToolStripMenuItem.Checked = Not AnimateToolStripMenuItem.Checked
+        MdiTabStrip1.Animate = AnimateToolStripMenuItem.Checked
     End Sub
 
     Private Sub ShowIconToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ShowIconToolStripMenuItem.Click
-        Me.ShowIconToolStripMenuItem.Checked = Not Me.ShowIconToolStripMenuItem.Checked
-        Me.MdiTabStrip1.DisplayFormIcon = Me.ShowIconToolStripMenuItem.Checked
+        ShowIconToolStripMenuItem.Checked = Not ShowIconToolStripMenuItem.Checked
+        MdiTabStrip1.DisplayFormIcon = ShowIconToolStripMenuItem.Checked
     End Sub
 
     Private Sub Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
@@ -62,22 +62,22 @@ Public Class Form1
     End Sub
 
     Private Sub NoneToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles NoneToolStripMenuItem.Click
-        Me.MdiTabStrip1.TabPermanence = MdiTabStrip2.MdiTabPermanence.None
-        Me.SetTabPermanenceMenuItemCheckedState(Me.NoneToolStripMenuItem)
+        MdiTabStrip1.TabPermanence = MdiTabStrip2.MdiTabPermanence.None
+        SetTabPermanenceMenuItemCheckedState(NoneToolStripMenuItem)
     End Sub
 
     Private Sub FirstTabToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles FirstTabToolStripMenuItem.Click
-        Me.MdiTabStrip1.TabPermanence = MdiTabStrip2.MdiTabPermanence.First
-        Me.SetTabPermanenceMenuItemCheckedState(Me.FirstTabToolStripMenuItem)
+        MdiTabStrip1.TabPermanence = MdiTabStrip2.MdiTabPermanence.First
+        SetTabPermanenceMenuItemCheckedState(FirstTabToolStripMenuItem)
     End Sub
 
     Private Sub LastTabOpenToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles LastTabOpenToolStripMenuItem.Click
-        Me.MdiTabStrip1.TabPermanence = MdiTabStrip2.MdiTabPermanence.LastOpen
-        Me.SetTabPermanenceMenuItemCheckedState(Me.LastTabOpenToolStripMenuItem)
+        MdiTabStrip1.TabPermanence = MdiTabStrip2.MdiTabPermanence.LastOpen
+        SetTabPermanenceMenuItemCheckedState(LastTabOpenToolStripMenuItem)
     End Sub
 
     Private Sub SetTabPermanenceMenuItemCheckedState(ByVal ti As ToolStripItem)
-        For Each item As ToolStripItem In Me.TabPermanenceToolStripMenuItem.DropDownItems
+        For Each item As ToolStripItem In TabPermanenceToolStripMenuItem.DropDownItems
             If item IsNot ti Then
                 CType(item, ToolStripMenuItem).Checked = False
             End If
@@ -85,22 +85,22 @@ Public Class Form1
     End Sub
 
     Private Sub RightToLeftToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RightToLeftToolStripMenuItem.Click
-        Me.RightToLeftToolStripMenuItem.Checked = Not Me.RightToLeftToolStripMenuItem.Checked
-        If Me.RightToLeftToolStripMenuItem.Checked Then
-            Me.MdiTabStrip1.RightToLeft = Windows.Forms.RightToLeft.Yes
+        RightToLeftToolStripMenuItem.Checked = Not RightToLeftToolStripMenuItem.Checked
+        If RightToLeftToolStripMenuItem.Checked Then
+            MdiTabStrip1.RightToLeft = Windows.Forms.RightToLeft.Yes
         Else
-            Me.MdiTabStrip1.RightToLeft = Windows.Forms.RightToLeft.No
+            MdiTabStrip1.RightToLeft = Windows.Forms.RightToLeft.No
         End If
     End Sub
 
     Private Sub ShowMdiNewTabToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ShowMdiNewTabToolStripMenuItem.Click
-        Me.ShowMdiNewTabToolStripMenuItem.Checked = Not Me.ShowMdiNewTabToolStripMenuItem.Checked
-        Me.MdiTabStrip1.MdiNewTabVisible = Me.ShowMdiNewTabToolStripMenuItem.Checked
+        ShowMdiNewTabToolStripMenuItem.Checked = Not ShowMdiNewTabToolStripMenuItem.Checked
+        MdiTabStrip1.MdiNewTabVisible = ShowMdiNewTabToolStripMenuItem.Checked
     End Sub
 
     Private Sub ShowToolTipsToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ShowToolTipsToolStripMenuItem.Click
-        Me.ShowToolTipsToolStripMenuItem.Checked = Not Me.ShowToolTipsToolStripMenuItem.Checked
-        Me.MdiTabStrip1.ShowTabToolTip = Me.ShowToolTipsToolStripMenuItem.Checked
+        ShowToolTipsToolStripMenuItem.Checked = Not ShowToolTipsToolStripMenuItem.Checked
+        MdiTabStrip1.ShowTabToolTip = ShowToolTipsToolStripMenuItem.Checked
     End Sub
 
     Private Sub NewToolStripButton_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles NewToolStripButton.Click

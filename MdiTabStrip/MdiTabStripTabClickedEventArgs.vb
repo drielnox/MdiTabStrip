@@ -4,7 +4,7 @@ Public Class MdiTabStripTabClickedEventArgs
     Private _tab As MdiTab
 
     Public Sub New(ByVal tabItem As MdiTab)
-        Me._tab = tabItem
+        _tab = tabItem
     End Sub
 
     Public ReadOnly Property ClickedTab() As MdiTab

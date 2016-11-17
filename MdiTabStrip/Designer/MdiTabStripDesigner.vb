@@ -11,12 +11,12 @@ Namespace Design
 
         Public Overrides ReadOnly Property ActionLists() As DesignerActionListCollection
             Get
-                If Me.m_actionLists Is Nothing Then
-                    Me.m_actionLists = New DesignerActionListCollection
-                    Me.m_actionLists.Add(New MdiTabStripDesignerActionList(Me.Component))
+                If m_actionLists Is Nothing Then
+                    m_actionLists = New DesignerActionListCollection
+                    m_actionLists.Add(New MdiTabStripDesignerActionList(Component))
                 End If
 
-                Return Me.m_actionLists
+                Return m_actionLists
             End Get
         End Property
 
@@ -50,8 +50,8 @@ Namespace Design
             Inherits Form
 
             Public Sub New()
-                Me.Text = "Active Tab"
-                Me.Icon = My.Resources.document
+                Text = "Active Tab"
+                Icon = My.Resources.document
             End Sub
         End Class
 
@@ -59,8 +59,8 @@ Namespace Design
             Inherits Form
 
             Public Sub New()
-                Me.Text = "Inactive Tab"
-                Me.Icon = My.Resources.document
+                Text = "Inactive Tab"
+                Icon = My.Resources.document
             End Sub
         End Class
 
@@ -68,8 +68,8 @@ Namespace Design
             Inherits Form
 
             Public Sub New()
-                Me.Text = "Moused Over Tab"
-                Me.Icon = My.Resources.document
+                Text = "Moused Over Tab"
+                Icon = My.Resources.document
             End Sub
         End Class
     End Class
@@ -82,7 +82,7 @@ Namespace Design
 
         Public Sub New(ByVal component As IComponent)
             MyBase.New(component)
-            Me._uiService = CType(GetService(GetType(DesignerActionUIService)), DesignerActionUIService)
+            _uiService = CType(GetService(GetType(DesignerActionUIService)), DesignerActionUIService)
         End Sub
 
         Public Overrides Function GetSortedActionItems() As DesignerActionItemCollection
@@ -93,15 +93,15 @@ Namespace Design
                     _actionItems.Add(New DesignerActionMethodItem(Me, "OpenInactiveTabEditor", "Design Tabs", "Appearance", "Opens the MdiTab Designer window."))
 
                     _actionItems.Add(New DesignerActionHeaderItem("Behavior"))
-                    _actionItems.Add(New DesignerActionPropertyItem("TabPermanence", "Tab permanence", GetCategory(Me.TabStrip, "TabPermanence"), GetDescription(Me.TabStrip, "TabPermanence")))
-                    _actionItems.Add(New DesignerActionPropertyItem("Animate", "Perform fade animation on mouse over", GetCategory(Me.TabStrip, "Animate"), GetDescription(Me.TabStrip, "Animate")))
-                    _actionItems.Add(New DesignerActionPropertyItem("DisplayFormIcon", "Display the form icon", "Behavior", GetDescription(Me.TabStrip, "DisplayFormIcon")))
-                    _actionItems.Add(New DesignerActionPropertyItem("MdiNewTabVisible", "Display the new tab", "Behavior", GetDescription(Me.TabStrip, "MdiNewTabVisible")))
+                    _actionItems.Add(New DesignerActionPropertyItem("TabPermanence", "Tab permanence", GetCategory(TabStrip, "TabPermanence"), GetDescription(TabStrip, "TabPermanence")))
+                    _actionItems.Add(New DesignerActionPropertyItem("Animate", "Perform fade animation on mouse over", GetCategory(TabStrip, "Animate"), GetDescription(TabStrip, "Animate")))
+                    _actionItems.Add(New DesignerActionPropertyItem("DisplayFormIcon", "Display the form icon", "Behavior", GetDescription(TabStrip, "DisplayFormIcon")))
+                    _actionItems.Add(New DesignerActionPropertyItem("MdiNewTabVisible", "Display the new tab", "Behavior", GetDescription(TabStrip, "MdiNewTabVisible")))
 
                     _actionItems.Add(New DesignerActionHeaderItem("Layout"))
-                    _actionItems.Add(New DesignerActionPropertyItem("MinTabWidth", "Minimum tab width", GetCategory(Me.TabStrip, "MinTabWidth"), GetDescription(Me.TabStrip, "MinTabWidth")))
-                    _actionItems.Add(New DesignerActionPropertyItem("MaxTabWidth", "Maximum tab width", GetCategory(Me.TabStrip, "MaxTabWidth"), GetDescription(Me.TabStrip, "MaxTabWidth")))
-                    _actionItems.Add(New DesignerActionPropertyItem("MdiWindowState", "Mdi form window state", GetCategory(Me.TabStrip, "MdiWindowState"), GetDescription(Me.TabStrip, "MdiWindowState")))
+                    _actionItems.Add(New DesignerActionPropertyItem("MinTabWidth", "Minimum tab width", GetCategory(TabStrip, "MinTabWidth"), GetDescription(TabStrip, "MinTabWidth")))
+                    _actionItems.Add(New DesignerActionPropertyItem("MaxTabWidth", "Maximum tab width", GetCategory(TabStrip, "MaxTabWidth"), GetDescription(TabStrip, "MaxTabWidth")))
+                    _actionItems.Add(New DesignerActionPropertyItem("MdiWindowState", "Mdi form window state", GetCategory(TabStrip, "MdiWindowState"), GetDescription(TabStrip, "MdiWindowState")))
                 End If
             End If
 
@@ -115,8 +115,8 @@ Namespace Design
         End Property
 
         Private Sub SetProperty(ByVal propertyName As String, ByVal value As Object)
-            Dim prop As PropertyDescriptor = TypeDescriptor.GetProperties(Me.TabStrip)(propertyName)
-            prop.SetValue(Me.TabStrip, value)
+            Dim prop As PropertyDescriptor = TypeDescriptor.GetProperties(TabStrip)(propertyName)
+            prop.SetValue(TabStrip, value)
         End Sub
 
         Private Function GetCategory(ByVal source As Object, ByVal propertyName As String) As String
@@ -156,7 +156,7 @@ Namespace Design
 #Region "MdiTabStrip Properties"
         Public Property ActiveTabColor() As Color
             Get
-                Return Me.TabStrip.ActiveTabColor
+                Return TabStrip.ActiveTabColor
             End Get
             Set(ByVal value As Color)
                 SetProperty("ActiveTabColor", value)
@@ -165,7 +165,7 @@ Namespace Design
 
         Public Property ActiveTabForeColor() As Color
             Get
-                Return Me.TabStrip.ActiveTabForeColor
+                Return TabStrip.ActiveTabForeColor
             End Get
             Set(ByVal value As Color)
                 SetProperty("ActiveTabForeColor", value)
@@ -174,7 +174,7 @@ Namespace Design
 
         Public Property ActiveTabFont() As Font
             Get
-                Return Me.TabStrip.ActiveTabFont
+                Return TabStrip.ActiveTabFont
             End Get
             Set(ByVal value As Font)
                 SetProperty("ActiveTabFont", value)
@@ -183,7 +183,7 @@ Namespace Design
 
         Public Property CloseButtonBackColor() As Color
             Get
-                Return Me.TabStrip.CloseButtonBackColor
+                Return TabStrip.CloseButtonBackColor
             End Get
             Set(ByVal value As Color)
                 SetProperty("CloseButtonBackColor", value)
@@ -192,7 +192,7 @@ Namespace Design
 
         Public Property CloseButtonForeColor() As Color
             Get
-                Return Me.TabStrip.CloseButtonForeColor
+                Return TabStrip.CloseButtonForeColor
             End Get
             Set(ByVal value As Color)
                 SetProperty("CloseButtonForeColor", value)
@@ -201,7 +201,7 @@ Namespace Design
 
         Public Property CloseButtonHotForeColor() As Color
             Get
-                Return Me.TabStrip.CloseButtonHotForeColor
+                Return TabStrip.CloseButtonHotForeColor
             End Get
             Set(ByVal value As Color)
                 SetProperty("CloseButtonHotForeColor", value)
@@ -210,7 +210,7 @@ Namespace Design
 
         Public Property CloseButtonBorderColor() As Color
             Get
-                Return Me.TabStrip.CloseButtonBorderColor
+                Return TabStrip.CloseButtonBorderColor
             End Get
             Set(ByVal value As Color)
                 SetProperty("CloseButtonBorderColor", value)
@@ -219,7 +219,7 @@ Namespace Design
 
         Public Property InactiveTabColor() As Color
             Get
-                Return Me.TabStrip.InactiveTabColor
+                Return TabStrip.InactiveTabColor
             End Get
             Set(ByVal value As Color)
                 SetProperty("InactiveTabColor", value)
@@ -228,7 +228,7 @@ Namespace Design
 
         Public Property InactiveTabForeColor() As Color
             Get
-                Return Me.TabStrip.InactiveTabForeColor
+                Return TabStrip.InactiveTabForeColor
             End Get
             Set(ByVal value As Color)
                 SetProperty("InactiveTabForeColor", value)
@@ -237,7 +237,7 @@ Namespace Design
 
         Public Property InactiveTabFont() As Font
             Get
-                Return Me.TabStrip.InactiveTabFont
+                Return TabStrip.InactiveTabFont
             End Get
             Set(ByVal value As Font)
                 SetProperty("InactiveTabFont", value)
@@ -246,7 +246,7 @@ Namespace Design
 
         Public Property MouseOverTabColor() As Color
             Get
-                Return Me.TabStrip.MouseOverTabColor
+                Return TabStrip.MouseOverTabColor
             End Get
             Set(ByVal value As Color)
                 SetProperty("MouseOverTabColor", value)
@@ -255,7 +255,7 @@ Namespace Design
 
         Public Property MouseOverTabForeColor() As Color
             Get
-                Return Me.TabStrip.MouseOverTabForeColor
+                Return TabStrip.MouseOverTabForeColor
             End Get
             Set(ByVal value As Color)
                 SetProperty("MouseOverTabForeColor", value)
@@ -264,7 +264,7 @@ Namespace Design
 
         Public Property MouseOverTabFont() As Font
             Get
-                Return Me.TabStrip.MouseOverTabFont
+                Return TabStrip.MouseOverTabFont
             End Get
             Set(ByVal value As Font)
                 SetProperty("MouseOverTabFont", value)
@@ -273,7 +273,7 @@ Namespace Design
 
         Public Property ActiveTabBorderColor() As Color
             Get
-                Return Me.TabStrip.ActiveTabBorderColor
+                Return TabStrip.ActiveTabBorderColor
             End Get
             Set(ByVal value As Color)
                 SetProperty("ActiveTabBorderColor", value)
@@ -282,7 +282,7 @@ Namespace Design
 
         Public Property InactiveTabBorderColor() As Color
             Get
-                Return Me.TabStrip.InactiveTabBorderColor
+                Return TabStrip.InactiveTabBorderColor
             End Get
             Set(ByVal value As Color)
                 SetProperty("InactiveTabBorderColor", value)
@@ -291,7 +291,7 @@ Namespace Design
 
         Public Property Animate() As Boolean
             Get
-                Return Me.TabStrip.Animate
+                Return TabStrip.Animate
             End Get
             Set(ByVal value As Boolean)
                 SetProperty("Animate", value)
@@ -300,7 +300,7 @@ Namespace Design
 
         Public Property TabPermanence() As MdiTabPermanence
             Get
-                Return Me.TabStrip.TabPermanence
+                Return TabStrip.TabPermanence
             End Get
             Set(ByVal value As MdiTabPermanence)
                 SetProperty("TabPermanence", value)
@@ -309,7 +309,7 @@ Namespace Design
 
         Public Property MaxTabWidth() As Integer
             Get
-                Return Me.TabStrip.MaxTabWidth
+                Return TabStrip.MaxTabWidth
             End Get
             Set(ByVal value As Integer)
                 SetProperty("MaxTabWidth", value)
@@ -318,7 +318,7 @@ Namespace Design
 
         Public Property MinTabWidth() As Integer
             Get
-                Return Me.TabStrip.MinTabWidth
+                Return TabStrip.MinTabWidth
             End Get
             Set(ByVal value As Integer)
                 SetProperty("MinTabWidth", value)
@@ -327,7 +327,7 @@ Namespace Design
 
         Public Property DisplayFormIcon() As Boolean
             Get
-                Return Me.TabStrip.DisplayFormIcon
+                Return TabStrip.DisplayFormIcon
             End Get
             Set(ByVal value As Boolean)
                 SetProperty("DisplayFormIcon", value)
@@ -336,7 +336,7 @@ Namespace Design
 
         Public Property MdiWindowState() As MdiChildWindowState
             Get
-                Return Me.TabStrip.MdiWindowState
+                Return TabStrip.MdiWindowState
             End Get
             Set(ByVal value As MdiChildWindowState)
                 SetProperty("MdiWindowState", value)
@@ -345,13 +345,13 @@ Namespace Design
 
         Public ReadOnly Property RightToLeft() As RightToLeft
             Get
-                Return Me.TabStrip.RightToLeft
+                Return TabStrip.RightToLeft
             End Get
         End Property
 
         Public Property MdiNewTabVisible() As Boolean
             Get
-                Return Me.TabStrip.MdiNewTabVisible
+                Return TabStrip.MdiNewTabVisible
             End Get
             Set(ByVal value As Boolean)
                 SetProperty("MdiNewTabVisible", value)
@@ -363,42 +363,42 @@ Namespace Design
             Dim editor As New MdiTabStripDesignerForm
             Dim template As New MdiTabTemplateControl()
 
-            template.InactiveTabTemplate.BackColor = Me.InactiveTabColor
-            template.InactiveTabTemplate.ForeColor = Me.InactiveTabForeColor
-            template.InactiveTabTemplate.Font = Me.InactiveTabFont
-            template.InactiveTabTemplate.BorderColor = Me.InactiveTabBorderColor
-            template.ActiveTabTemplate.BackColor = Me.ActiveTabColor
-            template.ActiveTabTemplate.ForeColor = Me.ActiveTabForeColor
-            template.ActiveTabTemplate.Font = Me.ActiveTabFont
-            template.ActiveTabTemplate.BorderColor = Me.ActiveTabBorderColor
-            template.ActiveTabTemplate.CloseButtonBackColor = Me.CloseButtonBackColor
-            template.ActiveTabTemplate.CloseButtonBorderColor = Me.CloseButtonBorderColor
-            template.ActiveTabTemplate.CloseButtonForeColor = Me.CloseButtonForeColor
-            template.ActiveTabTemplate.CloseButtonHotForeColor = Me.CloseButtonHotForeColor
-            template.MouseOverTabTemplate.BackColor = Me.MouseOverTabColor
-            template.MouseOverTabTemplate.ForeColor = Me.MouseOverTabForeColor
-            template.MouseOverTabTemplate.Font = Me.MouseOverTabFont
-            template.RightToLeft = Me.RightToLeft
+            template.InactiveTabTemplate.BackColor = InactiveTabColor
+            template.InactiveTabTemplate.ForeColor = InactiveTabForeColor
+            template.InactiveTabTemplate.Font = InactiveTabFont
+            template.InactiveTabTemplate.BorderColor = InactiveTabBorderColor
+            template.ActiveTabTemplate.BackColor = ActiveTabColor
+            template.ActiveTabTemplate.ForeColor = ActiveTabForeColor
+            template.ActiveTabTemplate.Font = ActiveTabFont
+            template.ActiveTabTemplate.BorderColor = ActiveTabBorderColor
+            template.ActiveTabTemplate.CloseButtonBackColor = CloseButtonBackColor
+            template.ActiveTabTemplate.CloseButtonBorderColor = CloseButtonBorderColor
+            template.ActiveTabTemplate.CloseButtonForeColor = CloseButtonForeColor
+            template.ActiveTabTemplate.CloseButtonHotForeColor = CloseButtonHotForeColor
+            template.MouseOverTabTemplate.BackColor = MouseOverTabColor
+            template.MouseOverTabTemplate.ForeColor = MouseOverTabForeColor
+            template.MouseOverTabTemplate.Font = MouseOverTabFont
+            template.RightToLeft = RightToLeft
 
             editor.TabTemplate = template
             editor.ShowDialog()
 
             If editor.DialogResult = DialogResult.OK Then
-                Me.InactiveTabColor = editor.TabTemplate.InactiveTabTemplate.BackColor
-                Me.InactiveTabForeColor = editor.TabTemplate.InactiveTabTemplate.ForeColor
-                Me.InactiveTabFont = editor.TabTemplate.InactiveTabTemplate.Font
-                Me.InactiveTabBorderColor = editor.TabTemplate.InactiveTabTemplate.BorderColor
-                Me.ActiveTabColor = editor.TabTemplate.ActiveTabTemplate.BackColor
-                Me.ActiveTabForeColor = editor.TabTemplate.ActiveTabTemplate.ForeColor
-                Me.ActiveTabBorderColor = editor.TabTemplate.ActiveTabTemplate.BorderColor
-                Me.ActiveTabFont = editor.TabTemplate.ActiveTabTemplate.Font
-                Me.CloseButtonBackColor = editor.TabTemplate.ActiveTabTemplate.CloseButtonBackColor
-                Me.CloseButtonForeColor = editor.TabTemplate.ActiveTabTemplate.CloseButtonForeColor
-                Me.CloseButtonHotForeColor = editor.TabTemplate.ActiveTabTemplate.CloseButtonHotForeColor
-                Me.CloseButtonBorderColor = editor.TabTemplate.ActiveTabTemplate.CloseButtonBorderColor
-                Me.MouseOverTabColor = editor.TabTemplate.MouseOverTabTemplate.BackColor
-                Me.MouseOverTabForeColor = editor.TabTemplate.MouseOverTabTemplate.ForeColor
-                Me.MouseOverTabFont = editor.TabTemplate.MouseOverTabTemplate.Font
+                InactiveTabColor = editor.TabTemplate.InactiveTabTemplate.BackColor
+                InactiveTabForeColor = editor.TabTemplate.InactiveTabTemplate.ForeColor
+                InactiveTabFont = editor.TabTemplate.InactiveTabTemplate.Font
+                InactiveTabBorderColor = editor.TabTemplate.InactiveTabTemplate.BorderColor
+                ActiveTabColor = editor.TabTemplate.ActiveTabTemplate.BackColor
+                ActiveTabForeColor = editor.TabTemplate.ActiveTabTemplate.ForeColor
+                ActiveTabBorderColor = editor.TabTemplate.ActiveTabTemplate.BorderColor
+                ActiveTabFont = editor.TabTemplate.ActiveTabTemplate.Font
+                CloseButtonBackColor = editor.TabTemplate.ActiveTabTemplate.CloseButtonBackColor
+                CloseButtonForeColor = editor.TabTemplate.ActiveTabTemplate.CloseButtonForeColor
+                CloseButtonHotForeColor = editor.TabTemplate.ActiveTabTemplate.CloseButtonHotForeColor
+                CloseButtonBorderColor = editor.TabTemplate.ActiveTabTemplate.CloseButtonBorderColor
+                MouseOverTabColor = editor.TabTemplate.MouseOverTabTemplate.BackColor
+                MouseOverTabForeColor = editor.TabTemplate.MouseOverTabTemplate.ForeColor
+                MouseOverTabFont = editor.TabTemplate.MouseOverTabTemplate.Font
             End If
         End Sub
     End Class
