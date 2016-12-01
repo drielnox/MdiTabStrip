@@ -62,7 +62,10 @@
 
         protected void InvokePropertyChanged()
         {
-            OnPropertyChanged?.Invoke(this, EventArgs.Empty);
+            if (OnPropertyChanged != null)
+            {
+                OnPropertyChanged.Invoke(this, EventArgs.Empty);
+            }
         }
     }
 }

@@ -1,12 +1,12 @@
 ﻿using System;
-using System.Windows.Forms;
 using System.Drawing;
+using System.Windows.Forms;
 
 namespace MdiTabStrip
 {
     internal class MdiMenuItem : ToolStripMenuItem
     {
-        private bool m_isMouseOver = false;
+        private bool m_isMouseOver;
 
         private MdiTab m_ownerTab;
         public MdiMenuItem(MdiTab tab, EventHandler handler)
@@ -35,7 +35,7 @@ namespace MdiTabStrip
             get { return m_ownerTab.Visible; }
         }
 
-        internal new Image CheckedImage
+        internal Image CheckedImage
         {
             get
             {
@@ -45,14 +45,14 @@ namespace MdiTabStrip
             }
         }
         
-        protected override void OnMouseEnter(System.EventArgs e)
+        protected override void OnMouseEnter(EventArgs e)
         {
             base.OnMouseEnter(e);
             m_isMouseOver = true;
             Invalidate();
         }
 
-        protected override void OnMouseLeave(System.EventArgs e)
+        protected override void OnMouseLeave(EventArgs e)
         {
             base.OnMouseLeave(e);
             m_isMouseOver = false;

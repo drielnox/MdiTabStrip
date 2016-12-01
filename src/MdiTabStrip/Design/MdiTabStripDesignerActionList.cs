@@ -1,14 +1,16 @@
-﻿using System.ComponentModel;
-using System.ComponentModel.Design;
-using System.Drawing;
-using System.Reflection;
-using System.Windows.Forms;
+﻿
 
 namespace MdiTabStrip.Design
 {
+    using System.ComponentModel;
+    using System.ComponentModel.Design;
+    using System.Drawing;
+    using System.Reflection;
+    using System.Windows.Forms;
+
     internal class MdiTabStripDesignerActionList : DesignerActionList
     {
-        private DesignerActionItemCollection _actionItems = null;
+        private DesignerActionItemCollection _actionItems;
         private DesignerActionUIService _uiService = null;
 
         public MdiTabStrip TabStrip

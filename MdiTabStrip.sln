@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 2013
+VisualStudioVersion = 12.0.40629.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "MdiTabStrip2", "MdiTabStrip\MdiTabStrip2.vbproj", "{DAA053B9-3316-4A1A-B9B9-A185D6DA73DA}"
 EndProject
@@ -14,6 +14,11 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{76D4C485-6EC3-4D9B-97FA-7B02E62B719F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MdiTabStrip.Test", "test\MdiTabStrip.Test\MdiTabStrip.Test.csproj", "{06ED32CF-A3B4-4389-8209-B7162EAE4C37}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{C55AA7CD-C646-4841-8B31-5E8D870D4F06}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\packages.config = .nuget\packages.config
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,11 +1,11 @@
-﻿using System.ComponentModel.Design;
-using System.Windows.Forms.Design;
-
-namespace MdiTabStrip.Design
+﻿namespace MdiTabStrip.Design
 {
+    using System.ComponentModel.Design;
+    using System.Windows.Forms.Design;
+
     public class MdiTabStripDesigner : ControlDesigner
     {
-        private DesignerActionListCollection _actionLists = null;
+        private DesignerActionListCollection _actionLists;
 
         public override DesignerActionListCollection ActionLists
         {

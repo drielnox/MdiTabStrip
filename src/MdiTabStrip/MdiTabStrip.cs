@@ -1,12 +1,12 @@
-﻿using System;
+﻿using MdiTabStrip.Design;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing.Drawing2D;
 using System.Drawing;
-using System.Windows.Forms;
-using MdiTabStrip.Design;
+using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
+using System.Windows.Forms;
 using System.Windows.Forms.Layout;
 
 namespace MdiTabStrip
@@ -20,74 +20,24 @@ namespace MdiTabStrip
     {
         private TabStripLayoutEngine _layout;
         private MdiTab _activeTab;
-        private MdiTabCollection _tabs = new MdiTabCollection();
+        private MdiTabCollection _tabs;
         private int _indexOfTabForDrop;
-        private bool _isDragging = false;
+        private bool _isDragging;
         private int _maxTabWidth = 200;
         private int _minTabWidth = 80;
-        private MdiTabStripItemBase _mouseOverControl = null;
+        private MdiTabStripItemBase _mouseOverControl;
         private ScrollDirection _dragDirection = ScrollDirection.Left;
-        private MdiScrollTab withEventsField__leftScrollTab;
-        private MdiScrollTab _leftScrollTab
-        {
-            get { return withEventsField__leftScrollTab; }
-            set
-            {
-                if (withEventsField__leftScrollTab != null)
-                {
-                    withEventsField__leftScrollTab.ScrollTab -= leftTabScroll_ScrollTab;
-                }
-                withEventsField__leftScrollTab = value;
-                if (withEventsField__leftScrollTab != null)
-                {
-                    withEventsField__leftScrollTab.ScrollTab += leftTabScroll_ScrollTab;
-                }
-            }
-        }
+        private MdiScrollTab _leftScrollTab;
         private MdiScrollTab _dropDownScrollTab;
-        private MdiScrollTab withEventsField__rightScrollTab;
-        private MdiScrollTab _rightScrollTab
-        {
-            get { return withEventsField__rightScrollTab; }
-            set
-            {
-                if (withEventsField__rightScrollTab != null)
-                {
-                    withEventsField__rightScrollTab.ScrollTab -= rightTabScroll_ScrollTab;
-                }
-                withEventsField__rightScrollTab = value;
-                if (withEventsField__rightScrollTab != null)
-                {
-                    withEventsField__rightScrollTab.ScrollTab += rightTabScroll_ScrollTab;
-                }
-            }
-        }
+        private MdiScrollTab _rightScrollTab;
         private MdiNewTab _newTab;
-        private bool _mdiNewTabVisible = false;
+        private bool _mdiNewTabVisible;
         private int _mdiNewTabWidth = 25;
-        private Image _mdiNewTabImage = null;
+        private Image _mdiNewTabImage;
         private MdiTabPermanence _tabPermanence = MdiTabPermanence.None;
         private bool _displayFormIcon = true;
         private MdiChildWindowState _mdiWindowState = MdiChildWindowState.Normal;
-        private ToolTip withEventsField__toolTip = new ToolTip();
-        private ToolTip _toolTip
-        {
-            get { return withEventsField__toolTip; }
-            set
-            {
-                if (withEventsField__toolTip != null)
-                {
-                    withEventsField__toolTip.Popup -= _toolTip_Popup;
-                    withEventsField__toolTip.Draw -= _toolTip_Draw;
-                }
-                withEventsField__toolTip = value;
-                if (withEventsField__toolTip != null)
-                {
-                    withEventsField__toolTip.Popup += _toolTip_Popup;
-                    withEventsField__toolTip.Draw += _toolTip_Draw;
-                }
-            }
-        }
+        private ToolTip _toolTip;
         private bool _showTabToolTip = true;
 
         private string _newTabToolTipText = "New Tab";
@@ -115,23 +65,7 @@ namespace MdiTabStrip
         //Fade animation fields
         private bool _animate = true;
         private int _duration = 20;
-        private Timer withEventsField__timer = new Timer();
-        private Timer _timer
-        {
-            get { return withEventsField__timer; }
-            set
-            {
-                if (withEventsField__timer != null)
-                {
-                    withEventsField__timer.Tick -= _timer_Tick;
-                }
-                withEventsField__timer = value;
-                if (withEventsField__timer != null)
-                {
-                    withEventsField__timer.Tick += _timer_Tick;
-                }
-            }
-        }
+        private Timer _timer;
         private List<Color> _backColorFadeArray = new List<Color>();
         private List<Color> _foreColorFadeArray;
 
@@ -181,22 +115,34 @@ namespace MdiTabStrip
             //Padding values directly affect the tab's placement, change these in the designer to see
             //how the tab's size and placement change.
             Padding = new Padding(5, 3, 20, 5);
+            
+            _timer = new Timer();
             _timer.Interval = 2;
+            _timer.Tick += _timer_Tick;
             _backColorFadeArray = GetFadeSteps(_inactiveTabColor, _mouseOverTabColor);
             _foreColorFadeArray = GetFadeSteps(_inactiveTabForeColor, _mouseOverTabForeColor);
+            
+            _toolTip = new ToolTip();
             _toolTip.AutoPopDelay = 2000;
             _toolTip.OwnerDraw = true;
+            _toolTip.Popup += _toolTip_Popup;
+            _toolTip.Draw += _toolTip_Draw;
 
-            //Setup scrolltab sizes
-            _leftScrollTab.Size = new Size(20, DisplayRectangle.Height);
-            _dropDownScrollTab.Size = new Size(14, DisplayRectangle.Height);
-            _rightScrollTab.Size = new Size(20, DisplayRectangle.Height);
-            _newTab.Size = new Size(25, DisplayRectangle.Height);
+            _tabs = new MdiTabCollection();
 
             _newTab = new MdiNewTab(this);
+            _newTab.Size = new Size(25, DisplayRectangle.Height);
+
             _dropDownScrollTab = new MdiScrollTab(this, ScrollTabType.ScrollTabDropDown);
-            withEventsField__rightScrollTab = new MdiScrollTab(this, ScrollTabType.ScrollTabRight);
-            withEventsField__leftScrollTab = new MdiScrollTab(this, ScrollTabType.ScrollTabLeft);
+            _dropDownScrollTab.Size = new Size(14, DisplayRectangle.Height);
+
+            _rightScrollTab = new MdiScrollTab(this, ScrollTabType.ScrollTabRight);
+            _rightScrollTab.Size = new Size(20, DisplayRectangle.Height);
+            _rightScrollTab.ScrollTab += rightTabScroll_ScrollTab;
+
+            _leftScrollTab = new MdiScrollTab(this, ScrollTabType.ScrollTabLeft);
+            _leftScrollTab.Size = new Size(20, DisplayRectangle.Height);
+            _leftScrollTab.ScrollTab += leftTabScroll_ScrollTab;
         }
 
         /// <summary>
@@ -229,9 +175,6 @@ namespace MdiTabStrip
 
             base.Dispose(disposing);
         }
-
-        //Initialization is used so that the top form can be found. This is needed in case the control
-        //is added to a container control such as a panel.
 
         /// <summary>
         /// Signals the object that initialization is starting.
@@ -536,7 +479,7 @@ namespace MdiTabStrip
         /// Gets the rectangle that represents the display area of the control.
         /// </summary>
         /// <returns>A <see cref="Rectangle"/> that represents the display area of the control.</returns>
-        public override System.Drawing.Rectangle DisplayRectangle
+        public override Rectangle DisplayRectangle
         {
             get
             {
@@ -555,7 +498,7 @@ namespace MdiTabStrip
         /// Gets the default size of the control.
         /// </summary>
         /// <returns>The default <see cref="Size"/> of the control.</returns>
-        protected override System.Drawing.Size DefaultSize
+        protected override Size DefaultSize
         {
             get { return new Size(50, 35); }
         }
@@ -766,7 +709,7 @@ namespace MdiTabStrip
             get { return _activeTab; }
             set
             {
-                if (!object.ReferenceEquals(_activeTab, value))
+                if (!ReferenceEquals(_activeTab, value))
                 {
                     _activeTab = value;
                     OnCurrentMdiTabChanged(new EventArgs());
@@ -863,7 +806,7 @@ namespace MdiTabStrip
             //the form's text property is changed the drop down menu does not resize itself accordingly.
             foreach (MdiMenuItem mi in _dropDownScrollTab.MdiMenu.Items)
             {
-                if (object.ReferenceEquals(mi.Form, f))
+                if (ReferenceEquals(mi.Form, f))
                 {
                     mi.Text = f.Text;
                 }
@@ -876,7 +819,7 @@ namespace MdiTabStrip
         {
             foreach (MdiTab tab in Tabs)
             {
-                if (object.ReferenceEquals(tab.Form, mdiForm))
+                if (ReferenceEquals(tab.Form, mdiForm))
                 {
                     return true;
                 }
@@ -889,14 +832,14 @@ namespace MdiTabStrip
         {
             foreach (MdiTab t in Tabs)
             {
-                if (object.ReferenceEquals(t.Form, mdiForm))
+                if (ReferenceEquals(t.Form, mdiForm))
                 {
                     ActiveTab = t;
 
                     //Find the menu item of the drop down menu and set it's Checked property
                     foreach (MdiMenuItem mi in _dropDownScrollTab.MdiMenu.Items)
                     {
-                        if (object.ReferenceEquals(mi.Form, mdiForm))
+                        if (ReferenceEquals(mi.Form, mdiForm))
                         {
                             _dropDownScrollTab.MdiMenu.SetItemChecked(mi);
                             break; // TODO: might not be correct. Was : Exit For
@@ -947,7 +890,7 @@ namespace MdiTabStrip
         {
             foreach (MdiTab tab in Tabs)
             {
-                if (object.ReferenceEquals(tab.Form, mdiForm))
+                if (ReferenceEquals(tab.Form, mdiForm))
                 {
                     //This algorithm will get the index of the tab that is higher than the tab
                     //that is to be removed. This has the affect of making the tab occuring after
@@ -961,7 +904,7 @@ namespace MdiTabStrip
                     //Remove the cooresponding menu item from the drop down menu.
                     foreach (MdiMenuItem mi in _dropDownScrollTab.MdiMenu.Items)
                     {
-                        if (object.ReferenceEquals(mi.Form, tab.Form))
+                        if (ReferenceEquals(mi.Form, tab.Form))
                         {
                             _dropDownScrollTab.MdiMenu.Items.Remove(mi);
                             break; // TODO: might not be correct. Was : Exit For
@@ -1181,7 +1124,7 @@ namespace MdiTabStrip
         /// <param name="sender">Not used</param>
         /// <param name="e">Not used</param>
         /// <remarks></remarks>
-        private void _timer_Tick(object sender, System.EventArgs e)
+        private void _timer_Tick(object sender, EventArgs e)
         {
             int index = (_animatingTabs.Count - 1);
             while ((index >= 0))
@@ -1256,7 +1199,7 @@ namespace MdiTabStrip
             {
                 if (tab.Visible && tab.HitTest(e.X, e.Y))
                 {
-                    if (!object.ReferenceEquals(tab, _mouseOverControl))
+                    if (!ReferenceEquals(tab, _mouseOverControl))
                     {
                         if (_mouseOverControl != null)
                         {
@@ -1276,7 +1219,7 @@ namespace MdiTabStrip
 
             if (LeftScrollTab.Visible && LeftScrollTab.HitTest(e.X, e.Y))
             {
-                if (!object.ReferenceEquals(LeftScrollTab, _mouseOverControl))
+                if (!ReferenceEquals(LeftScrollTab, _mouseOverControl))
                 {
                     if (_mouseOverControl != null)
                     {
@@ -1294,7 +1237,7 @@ namespace MdiTabStrip
             }
             else if (DropDownTab.Visible && DropDownTab.HitTest(e.X, e.Y))
             {
-                if (!object.ReferenceEquals(DropDownTab, _mouseOverControl))
+                if (!ReferenceEquals(DropDownTab, _mouseOverControl))
                 {
                     if (_mouseOverControl != null)
                     {
@@ -1317,7 +1260,7 @@ namespace MdiTabStrip
             }
             else if (RightScrollTab.Visible && RightScrollTab.HitTest(e.X, e.Y))
             {
-                if (!object.ReferenceEquals(RightScrollTab, _mouseOverControl))
+                if (!ReferenceEquals(RightScrollTab, _mouseOverControl))
                 {
                     if (_mouseOverControl != null)
                     {
@@ -1335,7 +1278,7 @@ namespace MdiTabStrip
             }
             else if (MdiNewTabVisible && MdiNewTab.HitTest(e.X, e.Y))
             {
-                if (!object.ReferenceEquals(MdiNewTab, _mouseOverControl))
+                if (!ReferenceEquals(MdiNewTab, _mouseOverControl))
                 {
                     if (_mouseOverControl != null)
                     {
@@ -1392,7 +1335,7 @@ namespace MdiTabStrip
             }
         }
 
-        protected override void OnMouseLeave(System.EventArgs e)
+        protected override void OnMouseLeave(EventArgs e)
         {
             base.OnMouseLeave(e);
 
@@ -1419,7 +1362,7 @@ namespace MdiTabStrip
             _toolTip.Active = true;
             Point location = Cursor.Position;
             location.Y = (location.Y + (Cursor.Size.Height - Cursor.Current.HotSpot.Y));
-            _toolTip.Show(tipText, this, base.PointToClient(location), _toolTip.AutoPopDelay);
+            _toolTip.Show(tipText, this, PointToClient(location), _toolTip.AutoPopDelay);
         }
 
         protected override void OnDragOver(DragEventArgs drgevent)
@@ -1456,7 +1399,7 @@ namespace MdiTabStrip
                             //This should never happen but check just in case.
                             _indexOfTabForDrop = activeIndex;
                         }
-                        else if (object.ReferenceEquals(tab, ActiveTab))
+                        else if (ReferenceEquals(tab, ActiveTab))
                         {
                             //When starting a drag operation this should be the first test hit. We set the index
                             //to the active tab and setup the direction so that the indicator is displayed one
@@ -1606,7 +1549,7 @@ namespace MdiTabStrip
                         Form f = tab.Form;
                         foreach (MdiMenuItem mi in DropDownTab.MdiMenu.Items)
                         {
-                            if (object.ReferenceEquals(mi.Form, f))
+                            if (ReferenceEquals(mi.Form, f))
                             {
                                 DropDownTab.MdiMenu.Items.Remove(mi);
                                 DropDownTab.MdiMenu.Items.Insert(_indexOfTabForDrop, mi);
@@ -1645,7 +1588,7 @@ namespace MdiTabStrip
         {
             foreach (MdiMenuItem mi in _dropDownScrollTab.MdiMenu.Items)
             {
-                if (object.ReferenceEquals(mi.Form, f))
+                if (ReferenceEquals(mi.Form, f))
                 {
                     _dropDownScrollTab.MdiMenu.Items.Remove(mi);
                     break; // TODO: might not be correct. Was : Exit For
@@ -1946,7 +1889,7 @@ namespace MdiTabStrip
             return w;
         }
 
-        protected override void OnResize(System.EventArgs e)
+        protected override void OnResize(EventArgs e)
         {
             base.OnResize(e);
             UpdateTabVisibility(ScrollDirection.None);

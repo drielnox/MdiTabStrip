@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Linq;
 using System.ComponentModel;
-using System.Drawing.Drawing2D;
-using System.Runtime.InteropServices;
 using System.Drawing;
-using System.Windows.Forms;
+using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
+using System.Windows.Forms;
 
 namespace MdiTabStrip
 {
@@ -17,22 +15,17 @@ namespace MdiTabStrip
     [ToolboxItem(false)]
     public class MdiTab : MdiTabStripItemBase
     {
-        private MdiTabStrip m_owner;
-        private Form m_form;
-        private bool m_isMouseOver = false;
-        private bool m_isMouseOverCloseButton = false;
-        private bool m_isSwitching = false;
-        private Rectangle m_dragBox = Rectangle.Empty;
-        private Point[] m_activeBounds;
-        private Point[] m_activeInnerBounds;
-        private Point[] m_inactiveBounds;
-        private Point[] m_inactiveInnerBounds;
-        private Point[] m_closeButtonBounds;
-        private Point[] m_closeButtonGlyphBounds;
-        private Cursor m_dragCursor = null;
-        private bool m_isAnimating = false;
-        private AnimationType m_animationType;
-        private int m_currentFrame = 0;
+        private bool _isMouseOverCloseButton;
+        private bool _isSwitching;
+        private Rectangle _dragBox = Rectangle.Empty;
+        private Point[] _activeBounds;
+        private Point[] _activeInnerBounds;
+        private Point[] _inactiveBounds;
+        private Point[] _inactiveInnerBounds;
+        private Point[] _closeButtonBounds;
+        private Point[] _closeButtonGlyphBounds;
+        private Cursor _dragCursor;
+        private bool _isAnimating;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MdiTab"/> class.
@@ -49,9 +42,9 @@ namespace MdiTabStrip
         {
             if (disposing)
             {
-                if (m_dragCursor != null)
+                if (_dragCursor != null)
                 {
-                    m_dragCursor.Dispose();
+                    _dragCursor.Dispose();
                 }
             }
 
@@ -62,35 +55,23 @@ namespace MdiTabStrip
         /// Gets or sets the instance of a <see cref="Form"/> the <see cref="MdiTab"/> represents.
         /// </summary>
         /// <returns>The <see cref="Form"/> object the tab represents.</returns>
-        public Form Form
-        {
-            get { return m_form; }
-            set { m_form = value; }
-        }
+        public Form Form { get; set; }
 
-        internal MdiTabStrip ParentInternal
-        {
-            get { return m_owner; }
-            set { m_owner = value; }
-        }
+        internal MdiTabStrip ParentInternal { get; set; }
 
-        internal bool IsMouseOver
-        {
-            get { return m_isMouseOver; }
-            set { m_isMouseOver = value; }
-        }
+        internal bool IsMouseOver { get; set; }
 
         internal bool IsActive
         {
-            get { return object.ReferenceEquals(ParentInternal.ActiveTab, this); }
+            get { return ReferenceEquals(ParentInternal.ActiveTab, this); }
         }
 
         private bool IsAnimating
         {
-            get { return m_isAnimating; }
+            get { return _isAnimating; }
             set
             {
-                m_isAnimating = value;
+                _isAnimating = value;
 
                 if (value)
                 {
@@ -99,27 +80,20 @@ namespace MdiTabStrip
                 else
                 {
                     ParentInternal.RemoveAnimatingTab(this);
-                    m_animationType = AnimationType.None;
+                    AnimationType = AnimationType.None;
                 }
             }
         }
 
-        internal int CurrentFrame
-        {
-            get { return m_currentFrame; }
-            set { m_currentFrame = value; }
-        }
+        internal int CurrentFrame { get; set; }
 
-        internal AnimationType AnimationType
-        {
-            get { return m_animationType; }
-        }
+        internal AnimationType AnimationType { get; private set; }
 
         /// <summary>
         /// Gets the rectangle that represents the display area of the control.
         /// </summary>
         /// <returns>A <see cref="Rectangle"/> that represents the display area of the control.</returns>
-        public override System.Drawing.Rectangle DisplayRectangle
+        public override Rectangle DisplayRectangle
         {
             get
             {
@@ -131,14 +105,14 @@ namespace MdiTabStrip
 
         internal bool IsMouseOverCloseButton
         {
-            get { return m_isMouseOverCloseButton; }
+            get { return _isMouseOverCloseButton; }
             set
             {
-                if (m_isMouseOverCloseButton != value)
+                if (_isMouseOverCloseButton != value)
                 {
                     string txt = Form.Text;
 
-                    m_isMouseOverCloseButton = value;
+                    _isMouseOverCloseButton = value;
 
                     if (value)
                     {
@@ -176,7 +150,8 @@ namespace MdiTabStrip
                 {
                     return false;
                 }
-                else if (ParentInternal.TabPermanence == MdiTabPermanence.LastOpen && ParentInternal.Tabs.Count == 1)
+
+                if (ParentInternal.TabPermanence == MdiTabPermanence.LastOpen && ParentInternal.Tabs.Count == 1)
                 {
                     return false;
                 }
@@ -206,7 +181,7 @@ namespace MdiTabStrip
                 }
                 else if (IsAnimating)
                 {
-                    tabcolor = ParentInternal.BackColorFadeSteps[m_currentFrame];
+                    tabcolor = ParentInternal.BackColorFadeSteps[CurrentFrame];
                 }
                 else if (IsMouseOver)
                 {
@@ -229,7 +204,7 @@ namespace MdiTabStrip
                 }
                 else if (IsAnimating)
                 {
-                    foreColor = ParentInternal.ForeColorFadeSteps[m_currentFrame];
+                    foreColor = ParentInternal.ForeColorFadeSteps[CurrentFrame];
                 }
                 else if (IsMouseOver)
                 {
@@ -268,8 +243,6 @@ namespace MdiTabStrip
             }
         }
 
-
-
         internal bool HitTest(int x, int y)
         {
             bool hit = false;
@@ -277,7 +250,7 @@ namespace MdiTabStrip
             using (GraphicsPath gp = new GraphicsPath())
             {
                 gp.StartFigure();
-                gp.AddLines(m_inactiveBounds);
+                gp.AddLines(_inactiveBounds);
                 gp.CloseFigure();
 
                 using (Pen borderpen = new Pen(Color.Black, 1))
@@ -299,7 +272,7 @@ namespace MdiTabStrip
             using (GraphicsPath gp = new GraphicsPath())
             {
                 gp.StartFigure();
-                gp.AddLines(m_closeButtonBounds);
+                gp.AddLines(_closeButtonBounds);
                 gp.CloseFigure();
 
                 using (Pen borderpen = new Pen(Color.Black, 1))
@@ -313,8 +286,6 @@ namespace MdiTabStrip
 
             return hit;
         }
-
-
 
         internal void DrawControlBackground(Graphics g)
         {
@@ -336,22 +307,12 @@ namespace MdiTabStrip
             Blend shadowBlend = new Blend();
 
             g.SmoothingMode = SmoothingMode.None;
-            shadowBlend.Factors = new float[] {
-            0f,
-            0.1f,
-            0.3f,
-            0.4f
-        };
-            shadowBlend.Positions = new float[] {
-            0f,
-            0.5f,
-            0.8f,
-            1f
-        };
+            shadowBlend.Factors = new[] { 0f, 0.1f, 0.3f, 0.4f };
+            shadowBlend.Positions = new[] { 0f, 0.5f, 0.8f, 1f };
 
             using (GraphicsPath outerPath = new GraphicsPath())
             {
-                outerPath.AddLines(m_activeBounds);
+                outerPath.AddLines(_activeBounds);
 
                 using (LinearGradientBrush gradientBrush = GetGradientBackBrush())
                 {
@@ -371,7 +332,7 @@ namespace MdiTabStrip
             //Draw the inner border
             using (GraphicsPath innerPath = new GraphicsPath())
             {
-                innerPath.AddLines(m_activeInnerBounds);
+                innerPath.AddLines(_activeInnerBounds);
 
                 Color lineColor = Color.FromArgb(120, 255, 255, 255);
                 g.DrawPath(new Pen(lineColor), innerPath);
@@ -389,7 +350,7 @@ namespace MdiTabStrip
 
             using (GraphicsPath outerPath = new GraphicsPath())
             {
-                outerPath.AddLines(m_inactiveBounds);
+                outerPath.AddLines(_inactiveBounds);
 
                 using (LinearGradientBrush gradientBrush = GetGradientBackBrush())
                 {
@@ -403,7 +364,7 @@ namespace MdiTabStrip
             //Draw the inner border
             using (GraphicsPath innerPath = new GraphicsPath())
             {
-                innerPath.AddLines(m_inactiveInnerBounds);
+                innerPath.AddLines(_inactiveInnerBounds);
 
                 Color lineColor = Color.FromArgb(120, 255, 255, 255);
                 g.DrawPath(new Pen(lineColor), innerPath);
@@ -417,47 +378,19 @@ namespace MdiTabStrip
 
             if (IsActive)
             {
-                bl.Factors = new float[] {
-                0.3f,
-                0.4f,
-                0.5f,
-                1f,
-                1f
-            };
-                bl.Positions = new float[] {
-                0f,
-                0.2f,
-                0.35f,
-                0.35f,
-                1f
-            };
+                bl.Factors = new[] { 0.3f, 0.4f, 0.5f, 1f, 1f };
+                bl.Positions = new[] { 0f, 0.2f, 0.35f, 0.35f, 1f };
             }
             else
             {
-                bl.Factors = new float[] {
-                0.3f,
-                0.4f,
-                0.5f,
-                1f,
-                0.8f,
-                0.7f
-            };
-                bl.Positions = new float[] {
-                0f,
-                0.2f,
-                0.4f,
-                0.4f,
-                0.8f,
-                1f
-            };
+                bl.Factors = new[] { 0.3f, 0.4f, 0.5f, 1f, 0.8f, 0.7f };
+                bl.Positions = new[] { 0f, 0.2f, 0.4f, 0.4f, 0.8f, 1f };
             }
 
             b.Blend = bl;
 
             return b;
         }
-
-
 
         internal virtual void DrawControl(Graphics g)
         {
@@ -495,16 +428,9 @@ namespace MdiTabStrip
 
         private void DrawFormIcon(Graphics g)
         {
-            Rectangle iconRectangle = default(Rectangle);
-
-            if (ParentInternal.RightToLeft == RightToLeft.Yes)
-            {
-                iconRectangle = new Rectangle(Right - 20, Top + 5, 17, 17);
-            }
-            else
-            {
-                iconRectangle = new Rectangle(Left + 5, Top + 5, 17, 17);
-            }
+            Rectangle iconRectangle = ParentInternal.RightToLeft == RightToLeft.Yes
+                ? new Rectangle(Right - 20, Top + 5, 17, 17)
+                : new Rectangle(Left + 5, Top + 5, 17, 17);
 
             if (!IsActive)
             {
@@ -524,8 +450,6 @@ namespace MdiTabStrip
 
         private void DrawTabText(Graphics g, Size proposedSize)
         {
-            Size s = default(Size);
-            Rectangle textRectangle = default(Rectangle);
             TextFormatFlags textFlags = TextFormatFlags.WordEllipsis | TextFormatFlags.EndEllipsis;
             bool isRightToLeft = ParentInternal.RightToLeft == RightToLeft.Yes;
 
@@ -534,8 +458,8 @@ namespace MdiTabStrip
                 textFlags = textFlags | TextFormatFlags.Right;
             }
 
-            s = TextRenderer.MeasureText(g, Form.Text, TabFont, proposedSize, textFlags);
-            textRectangle = new Rectangle(Left + 5, Top + 8, proposedSize.Width, s.Height);
+            Size s = TextRenderer.MeasureText(g, Form.Text, TabFont, proposedSize, textFlags);
+            Rectangle textRectangle = new Rectangle(Left + 5, Top + 8, proposedSize.Width, s.Height);
 
             if (isRightToLeft)
             {
@@ -576,7 +500,7 @@ namespace MdiTabStrip
         {
             using (GraphicsPath gp = new GraphicsPath())
             {
-                gp.AddLines(m_closeButtonBounds);
+                gp.AddLines(_closeButtonBounds);
 
                 using (SolidBrush backBrush = new SolidBrush(ParentInternal.CloseButtonBackColor))
                 {
@@ -606,7 +530,7 @@ namespace MdiTabStrip
                 Matrix translateMatrix = new Matrix();
                 Color shadowColor = Color.FromArgb(30, 0, 0, 0);
 
-                shadow.AddLines(m_closeButtonGlyphBounds);
+                shadow.AddLines(_closeButtonGlyphBounds);
                 translateMatrix.Translate(1, 1);
                 shadow.Transform(translateMatrix);
 
@@ -614,6 +538,7 @@ namespace MdiTabStrip
                 {
                     g.FillPath(shadowBrush, shadow);
                 }
+
                 using (Pen shadowPen = new Pen(shadowColor))
                 {
                     g.DrawPath(shadowPen, shadow);
@@ -622,12 +547,13 @@ namespace MdiTabStrip
 
             using (GraphicsPath gp = new GraphicsPath())
             {
-                gp.AddLines(m_closeButtonGlyphBounds);
+                gp.AddLines(_closeButtonGlyphBounds);
 
                 using (SolidBrush glyphBrush = new SolidBrush(glyphColor))
                 {
                     g.FillPath(glyphBrush, gp);
                 }
+
                 using (Pen glyphPen = new Pen(glyphColor))
                 {
                     g.DrawPath(glyphPen, gp);
@@ -652,8 +578,6 @@ namespace MdiTabStrip
             DrawTabText(g, proposedSize);
         }
 
-
-
         internal void StartAnimation(AnimationType animation)
         {
             //When the cursor is moved over the control very quick it causes some odd behavior with the animation
@@ -668,8 +592,8 @@ namespace MdiTabStrip
                 return;
             }
 
-            m_animationType = animation;
-            if (((ParentInternal != null)))
+            AnimationType = animation;
+            if (ParentInternal != null)
             {
                 IsAnimating = true;
             }
@@ -677,7 +601,7 @@ namespace MdiTabStrip
 
         internal void OnAnimationTick(int newFrame)
         {
-            m_currentFrame = newFrame;
+            CurrentFrame = newFrame;
             ParentInternal.Invalidate(DisplayRectangle, false);
         }
 
@@ -686,168 +610,158 @@ namespace MdiTabStrip
             IsAnimating = false;
             ParentInternal.Invalidate(DisplayRectangle, false);
         }
-        [DllImport("User32.dll", EntryPoint = "LoadCursorFromFileW", CharSet = CharSet.Unicode, SetLastError = true, ExactSpelling = true)]
-
-
-
-        private static extern IntPtr LoadCursorFromFile(string filename);
 
         private Cursor GetCustomCursor(string fileName)
         {
-            IntPtr hCursor = default(IntPtr);
             Cursor result = null;
 
             try
             {
-                hCursor = LoadCursorFromFile(fileName);
+                IntPtr hCursor = NativeMethods.LoadCursorFromFile(fileName);
                 if (!IntPtr.Zero.Equals(hCursor))
                 {
                     result = new Cursor(hCursor);
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //Catch but don't process the exception. If this method returns nothing then
                 //the default Windows drag cursor will be used.
                 return null;
             }
+
             return result;
         }
 
-
-
-
-
         protected override void OnLayout(LayoutEventArgs levent)
         {
-            m_activeBounds = new Point[] {
-            new Point(-2, ParentInternal.Bottom),
-            new Point(-2, Bottom),
-            new Point(Left - 3, Bottom),
-            new Point(Left, Bottom - 1),
-            new Point(Left, Top + 3),
-            new Point(Left + 2, Top),
-            new Point(Right - 2, Top),
-            new Point(Right, Top + 3),
-            new Point(Right, Bottom - 1),
-            new Point(Right + 2, Bottom),
-            new Point(ParentInternal.Width, Bottom),
-            new Point(ParentInternal.Width, ParentInternal.Bottom)
-        };
-            m_activeInnerBounds = new Point[] {
-            new Point(-1, ParentInternal.Bottom),
-            new Point(-1, Bottom + 1),
-            new Point(Left - 4, Bottom + 1),
-            new Point(Left + 1, Bottom),
-            new Point(Left + 1, Top + 4),
-            new Point(Left + 3, Top + 1),
-            new Point(Right - 3, Top + 1),
-            new Point(Right - 1, Top + 4),
-            new Point(Right - 1, Bottom),
-            new Point(Right + 3, Bottom + 1),
-            new Point(ParentInternal.Width - 1, Bottom + 1),
-            new Point(ParentInternal.Width - 1, ParentInternal.Bottom)
-        };
-            m_inactiveBounds = new Point[] {
-            new Point(Left, Bottom),
-            new Point(Left, Top + 5),
-            new Point(Left + 2, Top + 2),
-            new Point(Right - 2, Top + 2),
-            new Point(Right, Top + 5),
-            new Point(Right, Bottom)
-        };
-            m_inactiveInnerBounds = new Point[] {
-            new Point(Left + 1, Bottom),
-            new Point(Left + 1, Top + 6),
-            new Point(Left + 3, Top + 3),
-            new Point(Right - 3, Top + 3),
-            new Point(Right - 1, Top + 6),
-            new Point(Right - 1, Bottom)
-        };
+            _activeBounds = new[] 
+            {
+                new Point(-2, ParentInternal.Bottom),
+                new Point(-2, Bottom),
+                new Point(Left - 3, Bottom),
+                new Point(Left, Bottom - 1),
+                new Point(Left, Top + 3),
+                new Point(Left + 2, Top),
+                new Point(Right - 2, Top),
+                new Point(Right, Top + 3),
+                new Point(Right, Bottom - 1),
+                new Point(Right + 2, Bottom),
+                new Point(ParentInternal.Width, Bottom),
+                new Point(ParentInternal.Width, ParentInternal.Bottom)
+            };
+            _activeInnerBounds = new[]
+            {
+                new Point(-1, ParentInternal.Bottom),
+                new Point(-1, Bottom + 1),
+                new Point(Left - 4, Bottom + 1),
+                new Point(Left + 1, Bottom),
+                new Point(Left + 1, Top + 4),
+                new Point(Left + 3, Top + 1),
+                new Point(Right - 3, Top + 1),
+                new Point(Right - 1, Top + 4),
+                new Point(Right - 1, Bottom),
+                new Point(Right + 3, Bottom + 1),
+                new Point(ParentInternal.Width - 1, Bottom + 1),
+                new Point(ParentInternal.Width - 1, ParentInternal.Bottom)
+            };
+            _inactiveBounds = new[]
+            {
+                new Point(Left, Bottom),
+                new Point(Left, Top + 5),
+                new Point(Left + 2, Top + 2),
+                new Point(Right - 2, Top + 2),
+                new Point(Right, Top + 5),
+                new Point(Right, Bottom)
+            };
+            _inactiveInnerBounds = new[] 
+            {
+                new Point(Left + 1, Bottom),
+                new Point(Left + 1, Top + 6),
+                new Point(Left + 3, Top + 3),
+                new Point(Right - 3, Top + 3),
+                new Point(Right - 1, Top + 6),
+                new Point(Right - 1, Bottom)
+            };
 
             if (ParentInternal.RightToLeft == RightToLeft.Yes)
             {
-                m_closeButtonBounds = new Point[] {
-                new Point(Left + 18, Top + 7),
-                new Point(Left + 6, Top + 7),
-                new Point(Left + 4, Top + 9),
-                new Point(Left + 4, Top + 20),
-                new Point(Left + 6, Top + 22),
-                new Point(Left + 18, Top + 22),
-                new Point(Left + 20, Top + 20),
-                new Point(Left + 20, Top + 9),
-                new Point(Left + 18, Top + 7)
-            };
+                _closeButtonBounds = new[]
+                {
+                    new Point(Left + 18, Top + 7),
+                    new Point(Left + 6, Top + 7),
+                    new Point(Left + 4, Top + 9),
+                    new Point(Left + 4, Top + 20),
+                    new Point(Left + 6, Top + 22),
+                    new Point(Left + 18, Top + 22),
+                    new Point(Left + 20, Top + 20),
+                    new Point(Left + 20, Top + 9),
+                    new Point(Left + 18, Top + 7)
+                };
                 Point startPoint = new Point(Left + 8, Top + 11);
-                m_closeButtonGlyphBounds = new Point[] {
-                new Point(startPoint.X, startPoint.Y),
-                new Point(startPoint.X + 2, startPoint.Y),
-                new Point(startPoint.X + 4, startPoint.Y + 2),
-                new Point(startPoint.X + 6, startPoint.Y),
-                new Point(startPoint.X + 8, startPoint.Y),
-                new Point(startPoint.X + 5, startPoint.Y + 3),
-                new Point(startPoint.X + 5, startPoint.Y + 4),
-                new Point(startPoint.X + 8, startPoint.Y + 7),
-                new Point(startPoint.X + 6, startPoint.Y + 7),
-                new Point(startPoint.X + 4, startPoint.Y + 5),
-                new Point(startPoint.X + 2, startPoint.Y + 7),
-                new Point(startPoint.X, startPoint.Y + 7),
-                new Point(startPoint.X + 3, startPoint.Y + 4),
-                new Point(startPoint.X + 3, startPoint.Y + 3),
-                new Point(startPoint.X, startPoint.Y)
-            };
+                _closeButtonGlyphBounds = new[]
+                {
+                    new Point(startPoint.X, startPoint.Y),
+                    new Point(startPoint.X + 2, startPoint.Y),
+                    new Point(startPoint.X + 4, startPoint.Y + 2),
+                    new Point(startPoint.X + 6, startPoint.Y),
+                    new Point(startPoint.X + 8, startPoint.Y),
+                    new Point(startPoint.X + 5, startPoint.Y + 3),
+                    new Point(startPoint.X + 5, startPoint.Y + 4),
+                    new Point(startPoint.X + 8, startPoint.Y + 7),
+                    new Point(startPoint.X + 6, startPoint.Y + 7),
+                    new Point(startPoint.X + 4, startPoint.Y + 5),
+                    new Point(startPoint.X + 2, startPoint.Y + 7),
+                    new Point(startPoint.X, startPoint.Y + 7),
+                    new Point(startPoint.X + 3, startPoint.Y + 4),
+                    new Point(startPoint.X + 3, startPoint.Y + 3),
+                    new Point(startPoint.X, startPoint.Y)
+                };
             }
             else
             {
-                m_closeButtonBounds = new Point[] {
-                new Point(Right - 18, Top + 7),
-                new Point(Right - 6, Top + 7),
-                new Point(Right - 4, Top + 9),
-                new Point(Right - 4, Top + 20),
-                new Point(Right - 6, Top + 22),
-                new Point(Right - 18, Top + 22),
-                new Point(Right - 20, Top + 20),
-                new Point(Right - 20, Top + 9),
-                new Point(Right - 18, Top + 7)
-            };
+                _closeButtonBounds = new[] 
+                {
+                    new Point(Right - 18, Top + 7),
+                    new Point(Right - 6, Top + 7),
+                    new Point(Right - 4, Top + 9),
+                    new Point(Right - 4, Top + 20),
+                    new Point(Right - 6, Top + 22),
+                    new Point(Right - 18, Top + 22),
+                    new Point(Right - 20, Top + 20),
+                    new Point(Right - 20, Top + 9),
+                    new Point(Right - 18, Top + 7)
+                };
                 Point startPoint = new Point(Right - 16, Top + 11);
-                m_closeButtonGlyphBounds = new Point[] {
-                new Point(startPoint.X, startPoint.Y),
-                new Point(startPoint.X + 2, startPoint.Y),
-                new Point(startPoint.X + 4, startPoint.Y + 2),
-                new Point(startPoint.X + 6, startPoint.Y),
-                new Point(startPoint.X + 8, startPoint.Y),
-                new Point(startPoint.X + 5, startPoint.Y + 3),
-                new Point(startPoint.X + 5, startPoint.Y + 4),
-                new Point(startPoint.X + 8, startPoint.Y + 7),
-                new Point(startPoint.X + 6, startPoint.Y + 7),
-                new Point(startPoint.X + 4, startPoint.Y + 5),
-                new Point(startPoint.X + 2, startPoint.Y + 7),
-                new Point(startPoint.X, startPoint.Y + 7),
-                new Point(startPoint.X + 3, startPoint.Y + 4),
-                new Point(startPoint.X + 3, startPoint.Y + 3),
-                new Point(startPoint.X, startPoint.Y)
-            };
+                _closeButtonGlyphBounds = new[] 
+                {
+                    new Point(startPoint.X, startPoint.Y),
+                    new Point(startPoint.X + 2, startPoint.Y),
+                    new Point(startPoint.X + 4, startPoint.Y + 2),
+                    new Point(startPoint.X + 6, startPoint.Y),
+                    new Point(startPoint.X + 8, startPoint.Y),
+                    new Point(startPoint.X + 5, startPoint.Y + 3),
+                    new Point(startPoint.X + 5, startPoint.Y + 4),
+                    new Point(startPoint.X + 8, startPoint.Y + 7),
+                    new Point(startPoint.X + 6, startPoint.Y + 7),
+                    new Point(startPoint.X + 4, startPoint.Y + 5),
+                    new Point(startPoint.X + 2, startPoint.Y + 7),
+                    new Point(startPoint.X, startPoint.Y + 7),
+                    new Point(startPoint.X + 3, startPoint.Y + 4),
+                    new Point(startPoint.X + 3, startPoint.Y + 3),
+                    new Point(startPoint.X, startPoint.Y)
+                };
             }
         }
-
-
 
         protected override void OnGiveFeedback(GiveFeedbackEventArgs gfbevent)
         {
-            gfbevent.UseDefaultCursors = m_dragCursor == null;
+            gfbevent.UseDefaultCursors = _dragCursor == null;
 
-            if ((gfbevent.Effect & DragDropEffects.Move) == DragDropEffects.Move)
-            {
-                Cursor.Current = m_dragCursor;
-            }
-            else
-            {
-                Cursor.Current = Cursors.No;
-            }
+            Cursor.Current = (gfbevent.Effect & DragDropEffects.Move) == DragDropEffects.Move
+                ? _dragCursor
+                : Cursors.No;
         }
-
-
 
         protected override void OnMouseEnter(EventArgs e)
         {
@@ -879,7 +793,7 @@ namespace MdiTabStrip
                     {
                         //If the tab is currently animating then change it's animation type to properly fade
                         //back to the inactive color.
-                        m_animationType = AnimationType.FadeOut;
+                        AnimationType = AnimationType.FadeOut;
                     }
                     else
                     {
@@ -892,7 +806,7 @@ namespace MdiTabStrip
                 {
                     //If it is the active tab then reset the current frame to 0 because the tab
                     //might have been selected while animation was in process
-                    m_currentFrame = 0;
+                    CurrentFrame = 0;
                 }
             }
             else
@@ -905,18 +819,18 @@ namespace MdiTabStrip
         protected override void OnMouseDown(MouseEventArgs e)
         {
             Size dragsize = SystemInformation.DragSize;
-            m_owner.OnMdiTabClicked(new MdiTabStripTabClickedEventArgs(this));
+            ParentInternal.OnMdiTabClicked(new MdiTabStripTabClickedEventArgs(this));
 
             if (CanDrag)
             {
                 //If the tab can be dragged, which is determined by the TabPermenance property, then set the
                 //drag box and load the custom cursor.
-                m_dragBox = new Rectangle(new Point(e.X - (dragsize.Width / 2), e.Y - (dragsize.Height / 2)), dragsize);
+                _dragBox = new Rectangle(new Point(e.X - (dragsize.Width / 2), e.Y - (dragsize.Height / 2)), dragsize);
 
-                if (m_dragCursor == null)
+                if (_dragCursor == null)
                 {
                     string filePath = System.IO.Path.Combine(Application.StartupPath, "MyDragTab.cur");
-                    m_dragCursor = GetCustomCursor(filePath);
+                    _dragCursor = GetCustomCursor(filePath);
                 }
             }
 
@@ -924,23 +838,23 @@ namespace MdiTabStrip
             {
                 //Set the isSwitching field. This prevents the tab from being closed in the MouseUp event
                 //if the cursor is over the area in which the close button will be displayed.
-                m_isSwitching = true;
+                _isSwitching = true;
                 Form.Activate();
             }
         }
 
         protected override void OnMouseUp(MouseEventArgs e)
         {
-            m_dragBox = Rectangle.Empty;
+            _dragBox = Rectangle.Empty;
 
             //If the tab is closable and the user is not switching tabs and the mouse was clicked over the
             //close button then close the form. The tab is removed via the FormClose event handler in MdiTabStrip class.
-            if (CanClose && !m_isSwitching && closeButtonHitTest(e.X, e.Y))
+            if (CanClose && !_isSwitching && closeButtonHitTest(e.X, e.Y))
             {
                 Form.Close();
             }
 
-            m_isSwitching = false;
+            _isSwitching = false;
         }
 
         protected override void OnMouseMove(MouseEventArgs e)
@@ -950,14 +864,14 @@ namespace MdiTabStrip
                 if (CanDrag)
                 {
                     //If the tab can be dragged, which is determined by the TabPermenace property, then.
-                    if (m_dragBox != Rectangle.Empty & !m_dragBox.Contains(e.X, e.Y))
+                    if (_dragBox != Rectangle.Empty & !_dragBox.Contains(e.X, e.Y))
                     {
                         //If the cursor has been moved out of the bounds of the drag box while the left
                         //mouse button is down then initiate dragging by calling the DoDragDrop method.
 
-                        m_isSwitching = false;
-                        DragDropEffects dropEffects = DoDragDrop(this, DragDropEffects.Move);
-                        m_dragBox = Rectangle.Empty;
+                        _isSwitching = false;
+                        DoDragDrop(this, DragDropEffects.Move);
+                        _dragBox = Rectangle.Empty;
                     }
                 }
             }
@@ -970,9 +884,5 @@ namespace MdiTabStrip
                 }
             }
         }
-
-
-
-
     }
 }
